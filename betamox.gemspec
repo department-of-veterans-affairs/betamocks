@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Mock APIs by recording and/or generating responses and replaying them.'
   spec.description   = 'Similar to VCR for specs but for realz, like betamax it is less popular but higher quality.'
-  spec.homepage      = 'github.com/kreek/betamox'
+  spec.homepage      = 'http://github.com/kreek/betamox'
   spec.license       = 'MIT'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
