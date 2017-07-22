@@ -1,0 +1,4 @@
+---
+petstore.swagger.io:
+  :endpoints:
+  - "/v2/swagger.json": support/cache/pet_store/swagger
