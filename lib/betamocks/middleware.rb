@@ -1,4 +1,5 @@
 require_relative './response_store'
+require 'active_support/all'
 require 'faraday'
 require 'fileutils'
 require 'pp'
@@ -8,12 +9,18 @@ require 'pp'
 module Betamocks
   class Middleware < Faraday::Response::Middleware
     def call(env)
-      # puts env.to_yaml
       if Betamocks.configuration.mock_endpoint?(env.url.host, env.url.path)
         path = cache_path(env)
         FileUtils.mkdir_p(path) unless File.directory?(path)
         @response_cache_path = cache_file(env, path)
-        return Faraday::Response.new(YAML.load_file(@response_cache_path)) if File.exist?(@response_cache_path)
+        if File.exist?(@response_cache_path)
+          cached_env = YAML.load_file(@response_cache_path)
+          env.method = cached_env[:method]
+          env.body = cached_env[:body]
+          env.response_headers = cached_env[:headers]
+          env.status = cached_env[:status]
+          return Faraday::Response.new(env) if File.exist?(@response_cache_path)
+        end
       end
       super
     end
@@ -22,14 +29,10 @@ module Betamocks
       response_store = {
         method: env.method,
         body: env.body,
-        request_headers: env.request_headers,
+        headers: env.response_headers,
         status: env.status
       }
-      # File.open(@response_cache_path, 'w') { |f| f.write(env.to_yaml) }
       File.open(@response_cache_path, 'w') { |f| f.write(response_store.to_yaml) }
-      puts "\n\n\n"
-      puts response_store.to_yaml
-      puts "\n\n\n"
       env
     end
 

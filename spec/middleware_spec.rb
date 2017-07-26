@@ -45,7 +45,6 @@ RSpec.describe Betamocks::Middleware do
     context 'with a cached request' do
       it 'loads the cached file' do
         VCR.use_cassette('infinite_jest') do
-          expect(YAML).to receive(:load_file).once.with(cache_path)
           conn.get '/doc/resource/009407494.json'
           conn.get '/doc/resource/009407494.json'
         end
@@ -53,7 +52,7 @@ RSpec.describe Betamocks::Middleware do
     end
 
     after(:each) do
-      # FileUtils.rm_rf(File.join(Dir.pwd, 'spec', 'support', 'cache'))
+      FileUtils.rm_rf(File.join(Dir.pwd, 'spec', 'support', 'cache'))
     end
   end
 
