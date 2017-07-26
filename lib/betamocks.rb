@@ -1,9 +1,9 @@
-require 'betamox/version'
-require 'betamox/configuration'
-require 'betamox/middleware'
+require 'betamocks/version'
+require 'betamocks/configuration'
+require 'betamocks/middleware'
 require 'faraday'
 
-module Betamox
+module Betamocks
   class << self
     attr_writer :configuration
   end
@@ -17,4 +17,4 @@ module Betamox
   end
 end
 
-Faraday::Response.register_middleware betamox: Betamox::Middleware
+Faraday::Response.register_middleware betamocks: Betamocks::Middleware

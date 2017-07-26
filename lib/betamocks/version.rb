@@ -1,3 +1,3 @@
-module Betamox
+module Betamocks
   VERSION = "0.1.0"
 end
