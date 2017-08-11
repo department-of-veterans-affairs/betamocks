@@ -10,7 +10,6 @@ RSpec.describe Betamocks::Middleware do
   describe 'request caching' do
     let(:conn) do
       Faraday.new(:url => 'http://bnb.data.bl.uk') do |faraday|
-        puts faraday.inspect
         faraday.response :betamocks
         faraday.adapter Faraday.default_adapter
       end
@@ -47,26 +46,27 @@ RSpec.describe Betamocks::Middleware do
         VCR.use_cassette('infinite_jest') do
           expect_any_instance_of(Betamocks::Middleware).to receive(:load_env).once
           conn.get '/doc/resource/009407494.json'
-          conn.get '/doc/resource/009407494.json'
+          response = conn.get '/doc/resource/009407494.json'
+          puts response.inspect
         end
       end
     end
 
-    after(:each) do
-      # FileUtils.rm_rf(File.join(Dir.pwd, 'spec', 'support', 'cache'))
-    end
-  end
+    context 'with a service that does not exist' do
+      let(:conn) do
+        Faraday.new(:url => 'http://va.service.that.timesout') do |faraday|
+          faraday.response :betamocks
+          faraday.adapter Faraday.default_adapter
+        end
+      end
 
-  describe 'request stubbing' do
-    let(:conn) do
-      Faraday.new(:url => 'http://va.service.that.timesout') do |faraday|
-        faraday.response :betamocks
-        faraday.adapter Faraday.default_adapter
+      it 'records a blank response' do
+
       end
     end
 
-    it 'loads the stub file' do
-      conn.get '/v0/users/42/forms'
+    after(:each) do
+      FileUtils.rm_rf(File.join(Dir.pwd, 'spec', 'support', 'cache'))
     end
   end
 end

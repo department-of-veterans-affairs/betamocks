@@ -11,10 +11,18 @@ module Betamocks
         return Faraday::Response.new(load_env(env)) if File.exist?(@response_cache_path)
       end
       super
+    rescue Faraday::ConnectionFailed => e
+      cache_blank_response(env)
     end
 
     def on_complete(env)
-      cache(env)
+      response_store = {
+        method: env.method,
+        body: env.body,
+        headers: env.response_headers.as_json,
+        status: env.status
+      }
+      cache(response_store)
       env
     end
 
@@ -36,13 +44,7 @@ module Betamocks
       path
     end
 
-    def cache(env)
-      response_store = {
-        method: env.method,
-        body: env.body,
-        headers: env.response_headers.as_json,
-        status: env.status
-      }
+    def cache(response_store)
       File.open(@response_cache_path, 'w') { |f| f.write(response_store.to_yaml) }
     end
 
@@ -53,6 +55,24 @@ module Betamocks
       env.response_headers = cached_env[:headers]
       env.status = cached_env[:status]
       env
+    end
+
+    def cache_blank_response(env)
+      date = Time.now.utc.strftime('%a, %d %b %Y %T UTC')
+      response_store = {
+        method: env.method,
+        body: '{"data": {"todo": "replace me with a custom body"}}',
+        headers: {
+          'date' => date,
+          'access-control-allow-origin' => '*',
+          'last-modified' => date,
+          'x-served-from-cache' => 'false',
+          'content-type' => 'application/json',
+          'connection' => 'close'
+        },
+        status: 200
+      }
+      cache(response_store)
     end
   end
 end

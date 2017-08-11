@@ -5,6 +5,7 @@ require 'vcr'
 VCR.configure do |config|
   config.cassette_library_dir = 'spec/support/vcr_cassettes'
   config.hook_into :faraday
+  config.ignore_hosts 'va.service.that.timesout'
 end
 
 RSpec.configure do |config|

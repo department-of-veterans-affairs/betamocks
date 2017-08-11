@@ -6,7 +6,6 @@
   - int.va.service.that.timesout
   :endpoints:
   - :path: "/v0/users/*/forms"
-    :stub: "spec/support/responses/user.json"
 - :base_urls:
   - bnb.data.bl.uk
   :endpoints:
