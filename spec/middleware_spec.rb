@@ -24,8 +24,7 @@ RSpec.describe Betamocks::Middleware do
           'bnb.data.bl.uk',
           'doc',
           'resource',
-          '009407494.json',
-          '125a77e9.yml'
+          '009407494.json-125a77e9.yml'
         )
       end
 
@@ -67,8 +66,7 @@ RSpec.describe Betamocks::Middleware do
           'va.service.that.timesout',
           'v0',
           'users',
-          '42',
-          'forms'
+          '42'
         )
       end
 

@@ -21,7 +21,8 @@ module Betamocks
 
     def create_file_path
       dir_path = find_or_create_cache_dir
-      checksum = Adler32.checksum env.to_s
+      tail = File.basename(env.url.path)
+      checksum = "#{tail}-#{Adler32.checksum(env.to_s)}"
       File.join(dir_path, "#{checksum}.yml")
     end
 
@@ -29,7 +30,7 @@ module Betamocks
       path = File.join(
         Betamocks.configuration.cache_dir,
         @env.url.host,
-        @env.url.path
+        @env.url.path.split('/')[0...-1]
       )
       FileUtils.mkdir_p(path) unless File.directory?(path)
       path
