@@ -2,66 +2,47 @@ require 'active_support/all'
 require 'faraday'
 require 'fileutils'
 require 'pp'
+require_relative 'response_cache'
 
 module Betamocks
   class Middleware < Faraday::Response::Middleware
     def call(env)
-      if Betamocks.configuration.mock_endpoint?(env.url.host, env.url.path)
-        @response_cache_path = cache_file_path(env)
-        return Faraday::Response.new(load_env(env)) if File.exist?(@response_cache_path)
+      if mock_uri?(env)
+        @cache = Betamocks::ResponseCache.new(env)
+        response = @cache.load_response
+        return response if response
       end
       super
     rescue Faraday::ConnectionFailed => e
-      cache_blank_response(env)
+      cache_blank_response(env) if mock_uri?(env)
     end
 
     def on_complete(env)
-      response_store = {
-        method: env.method,
-        body: env.body,
-        headers: env.response_headers.as_json,
-        status: env.status
-      }
-      cache(response_store)
+      cache_response(env)
       env
     end
 
     private
 
-    def cache_file_path(env)
-      dir_path = find_or_create_cache_dir(env)
-      hex = Digest::MD5.hexdigest env.to_s
-      File.join(dir_path, "#{hex}.yml")
+    def mock_uri?(env)
+      Betamocks.configuration.mock_endpoint?(env.url.host, env.url.path)
     end
 
-    def find_or_create_cache_dir(env)
-      path = File.join(
-        Betamocks.configuration.cache_dir,
-        env.url.host,
-        env.url.path
-      )
-      FileUtils.mkdir_p(path) unless File.directory?(path)
-      path
-    end
-
-    def cache(response_store)
-      File.open(@response_cache_path, 'w') { |f| f.write(response_store.to_yaml) }
-    end
-
-    def load_env(env)
-      cached_env = YAML.load_file(@response_cache_path)
-      env.method = cached_env[:method]
-      env.body = cached_env[:body]
-      env.response_headers = cached_env[:headers]
-      env.status = cached_env[:status]
-      env
+    def cache_response(env)
+      response = {
+        method: env.method,
+        body: env.body,
+        headers: env.response_headers.as_json,
+        status: env.status
+      }
+      @cache.save_response(response)
     end
 
     def cache_blank_response(env)
       date = Time.now.utc.strftime('%a, %d %b %Y %T UTC')
-      response_store = {
+      response = {
         method: env.method,
-        body: '{"data": {"todo": "replace me with a custom body"}}',
+        body: "{\"data\": {\"todo\": \"edit the response file #{@cache.file_path}\"}}",
         headers: {
           'date' => date,
           'access-control-allow-origin' => '*',
@@ -72,7 +53,8 @@ module Betamocks
         },
         status: 200
       }
-      cache(response_store)
+      @cache.save_response(response)
+      @cache.load_response
     end
   end
 end

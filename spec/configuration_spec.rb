@@ -11,18 +11,18 @@ RSpec.describe Betamocks::Configuration do
     context 'with a file that exists' do
       let(:expected_config) do
         {
-          cache_dir: 'config/betamocks',
+          cache_dir: 'spec/support/cache',
           services:
             [
               {
-                id: :pet_store,
-                base_urls: %w(petstore.swagger.io dev.petstore.swagger.io),
-                endpoints: %w(/v2/swagger.json)
+                :base_urls => ["va.service.that.timesout", "int.va.service.that.timesout"],
+                :endpoints => [
+                  { :path => "/v0/users/*/forms" }
+                ]
               },
               {
-                id: :vets_gov,
-                base_urls: %w(dev.vets.gov staging.vets.gov),
-                endpoints: %w(/v0/user)
+                :base_urls => ["bnb.data.bl.uk"],
+                :endpoints => [{ :path => "/doc/resource/*" }]
               }
             ]
         }
@@ -36,11 +36,11 @@ RSpec.describe Betamocks::Configuration do
 
   describe '#mock_endpoint?' do
     it 'responds as true if the endpoint is mocked' do
-      expect(Betamocks.configuration.mock_endpoint?('petstore.swagger.io', '/v2/swagger.json')).to be_truthy
+      expect(Betamocks.configuration.mock_endpoint?('bnb.data.bl.uk', '/doc/resource/009407494.json')).to be_truthy
     end
 
     it 'responds as false if the endpoint is not mocked' do
-      expect(Betamocks.configuration.mock_endpoint?('funk.com', '/v2/lala.json')).to be_falsey
+      expect(Betamocks.configuration.mock_endpoint?('foo.com', '/v2/bar.json')).to be_falsey
     end
   end
 end
