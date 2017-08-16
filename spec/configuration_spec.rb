@@ -16,13 +16,11 @@ RSpec.describe Betamocks::Configuration do
             [
               {
                 :base_urls => ["va.service.that.timesout", "int.va.service.that.timesout"],
-                :endpoints => [
-                  { :path => "/v0/users/*/forms" }
-                ]
+                :endpoints => [{ :method => :get, :path => "/v0/users/*/forms" }]
               },
               {
                 :base_urls => ["bnb.data.bl.uk"],
-                :endpoints => [{ :path => "/doc/resource/*" }]
+                :endpoints => [{ :method => :get, :path => "/doc/resource/*" }]
               }
             ]
         }
@@ -36,11 +34,11 @@ RSpec.describe Betamocks::Configuration do
 
   describe '#mock_endpoint?' do
     it 'responds as true if the endpoint is mocked' do
-      expect(Betamocks.configuration.mock_endpoint?('bnb.data.bl.uk', '/doc/resource/009407494.json')).to be_truthy
+      expect(Betamocks.configuration.mock_endpoint?('bnb.data.bl.uk', :get, '/doc/resource/009407494.json')).to be_truthy
     end
 
     it 'responds as false if the endpoint is not mocked' do
-      expect(Betamocks.configuration.mock_endpoint?('foo.com', '/v2/bar.json')).to be_falsey
+      expect(Betamocks.configuration.mock_endpoint?('foo.com', :get, '/v2/bar.json')).to be_falsey
     end
   end
 end

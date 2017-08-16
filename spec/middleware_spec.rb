@@ -24,7 +24,7 @@ RSpec.describe Betamocks::Middleware do
           'bnb.data.bl.uk',
           'doc',
           'resource',
-          '009407494.json-125a77e9.yml'
+          '009407494.json_125a77e9.yml'
         )
       end
 

@@ -22,7 +22,7 @@ module Betamocks
     def create_file_path
       dir_path = find_or_create_cache_dir
       tail = File.basename(env.url.path)
-      checksum = "#{tail}-#{Adler32.checksum(env.to_s)}"
+      checksum = "#{tail}_#{Adler32.checksum(env.to_s)}"
       File.join(dir_path, "#{checksum}.yml")
     end
 

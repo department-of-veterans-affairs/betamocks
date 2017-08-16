@@ -25,7 +25,7 @@ module Betamocks
     private
 
     def mock_uri?(env)
-      Betamocks.configuration.mock_endpoint?(env.url.host, env.url.path)
+      Betamocks.configuration.mock_endpoint?(env.url.host, env.method, env.url.path)
     end
 
     def cache_response(env)

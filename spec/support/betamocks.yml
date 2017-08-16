@@ -5,8 +5,10 @@
   - va.service.that.timesout
   - int.va.service.that.timesout
   :endpoints:
-  - :path: "/v0/users/*/forms"
+  - :method: :get
+    :path: "/v0/users/*/forms"
 - :base_urls:
   - bnb.data.bl.uk
   :endpoints:
-  - :path: "/doc/resource/*"
+  - :method: :get
+    :path: "/doc/resource/*"
