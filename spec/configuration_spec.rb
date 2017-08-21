@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Betamocks::Configuration do
@@ -15,12 +17,12 @@ RSpec.describe Betamocks::Configuration do
           services:
             [
               {
-                :base_urls => ["va.service.that.timesout", "int.va.service.that.timesout"],
-                :endpoints => [{ :method => :get, :path => "/v0/users/*/forms" }]
+                base_urls: ['va.service.that.timesout', 'int.va.service.that.timesout'],
+                endpoints: [{ method: :get, path: '/v0/users/*/forms' }]
               },
               {
-                :base_urls => ["bnb.data.bl.uk"],
-                :endpoints => [{ :method => :get, :path => "/doc/resource/*" }]
+                base_urls: ['bnb.data.bl.uk'],
+                endpoints: [{ method: :get, path: '/doc/resource/*' }]
               }
             ]
         }
@@ -34,7 +36,9 @@ RSpec.describe Betamocks::Configuration do
 
   describe '#mock_endpoint?' do
     it 'responds as true if the endpoint is mocked' do
-      expect(Betamocks.configuration.mock_endpoint?('bnb.data.bl.uk', :get, '/doc/resource/009407494.json')).to be_truthy
+      expect(
+        Betamocks.configuration.mock_endpoint?('bnb.data.bl.uk', :get, '/doc/resource/009407494.json')
+      ).to be_truthy
     end
 
     it 'responds as false if the endpoint is not mocked' do

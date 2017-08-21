@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/all'
 require 'faraday'
 require 'fileutils'
@@ -13,7 +15,7 @@ module Betamocks
         return response if response
       end
       super
-    rescue Faraday::ConnectionFailed => e
+    rescue Faraday::ConnectionFailed
       cache_blank_response(env) if mock_uri?(env)
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Betamocks::Middleware do
@@ -9,22 +11,15 @@ RSpec.describe Betamocks::Middleware do
 
   describe 'request caching' do
     let(:conn) do
-      Faraday.new(:url => 'http://bnb.data.bl.uk') do |faraday|
+      Faraday.new(url: 'http://bnb.data.bl.uk') do |faraday|
         faraday.response :betamocks
         faraday.adapter Faraday.default_adapter
       end
     end
-
     context 'with an uncached request' do
       let(:cache_path) do
         File.join(
-          'spec',
-          'support',
-          'cache',
-          'bnb.data.bl.uk',
-          'doc',
-          'resource',
-          '009407494.json_125a77e9.yml'
+          'spec', 'support', 'cache', 'bnb.data.bl.uk', 'doc', 'resource', '009407494.json_125a77e9.yml'
         )
       end
 
@@ -32,11 +27,11 @@ RSpec.describe Betamocks::Middleware do
         VCR.use_cassette('infinite_jest') do
           conn.get '/doc/resource/009407494.json'
           expect(File).to exist(
-                            File.join(
-                              Dir.pwd,
-                              cache_path
-                            )
-                          )
+            File.join(
+              Dir.pwd,
+              cache_path
+            )
+          )
         end
       end
     end
@@ -53,31 +48,25 @@ RSpec.describe Betamocks::Middleware do
 
     context 'with a service that does not exist' do
       let(:conn) do
-        Faraday.new(:url => 'http://va.service.that.timesout') do |faraday|
+        Faraday.new(url: 'http://va.service.that.timesout') do |faraday|
           faraday.response :betamocks
           faraday.adapter Faraday.default_adapter
         end
       end
       let(:cache_path) do
         File.join(
-          'spec',
-          'support',
-          'cache',
-          'va.service.that.timesout',
-          'v0',
-          'users',
-          '42'
+          'spec', 'support', 'cache', 'va.service.that.timesout', 'v0', 'users', '42'
         )
       end
 
       it 'records a blank response' do
         response = conn.get '/v0/users/42/forms'
         expect(File).to exist(
-                          File.join(
-                            Dir.pwd,
-                            cache_path
-                          )
-                        )
+          File.join(
+            Dir.pwd,
+            cache_path
+          )
+        )
         expect(response).to be_a(Faraday::Response)
       end
     end

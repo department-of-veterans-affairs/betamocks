@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'yaml'
 
 module Betamocks
@@ -32,7 +34,7 @@ module Betamocks
     end
 
     def endpoints_match_path(endpoints, method, path)
-      result = endpoints.select { |e| /#{e[:path].gsub('/', '\/').gsub('*', '.*')}/ =~ 'funk' && e[:method] == method }
+      result = endpoints.select { |e| /#{e[:path].gsub('/', '\/').gsub('*', '.*')}/ =~ path && e[:method] == method }
       result.count
     end
   end

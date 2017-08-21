@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'betamocks/version'
 require 'betamocks/configuration'
 require 'betamocks/middleware'
