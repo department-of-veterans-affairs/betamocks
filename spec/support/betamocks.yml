@@ -1,5 +1,4 @@
 ---
-:cache_dir: spec/support/cache
 :services:
 - :base_urls:
   - va.service.that.timesout

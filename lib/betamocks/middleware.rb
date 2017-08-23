@@ -9,23 +9,26 @@ require_relative 'response_cache'
 module Betamocks
   class Middleware < Faraday::Response::Middleware
     def call(env)
-      endpoint_config = Betamocks.configuration.find_endpoint(env)
-      if endpoint_config
+      @endpoint_config = find_endpoint_config(env)
+      if @endpoint_config
         @cache = Betamocks::ResponseCache.new(env)
         response = @cache.load_response
         return response if response
       end
       super
-    rescue Faraday::ConnectionFailed, Faraday::TimeoutError
-      cache_blank_response(env) if endpoint_config
     end
 
     def on_complete(env)
-      cache_response(env)
+      cache_response(env) if @endpoint_config
       env
     end
 
     private
+
+    def find_endpoint_config(env)
+      return nil unless Betamocks.configuration.enabled
+      Betamocks.configuration.find_endpoint(env)
+    end
 
     def cache_response(env)
       response = {

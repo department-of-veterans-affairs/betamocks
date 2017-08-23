@@ -4,11 +4,7 @@ require 'yaml'
 
 module Betamocks
   class Configuration
-    attr_accessor :config_path, :mocked_endpoints
-
-    def cache_dir
-      config[:cache_dir]
-    end
+    attr_accessor :cache_dir, :enabled, :mocked_endpoints, :services_config
 
     def find_endpoint(env)
       service = config[:services].select { |s| s[:base_urls].include?(env.url.host) }.first
@@ -23,9 +19,9 @@ module Betamocks
     private
 
     def load_config
-      raise ArgumentError, 'config.config_path not set' unless config_path
-      raise IOError, 'config.config_path not found' unless File.exist? config_path
-      YAML.load_file(@config_path)
+      raise ArgumentError, 'config.services_config not set' unless @services_config
+      raise IOError, 'config.services_config file not found' unless File.exist? @services_config
+      YAML.load_file(@services_config)
     end
 
     def base_urls

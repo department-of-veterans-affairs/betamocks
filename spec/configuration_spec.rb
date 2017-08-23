@@ -5,7 +5,9 @@ require 'spec_helper'
 RSpec.describe Betamocks::Configuration do
   before(:each) do
     Betamocks.configure do |config|
-      config.config_path = File.join(File.dirname(__FILE__), 'support', 'betamocks.yml')
+      config.enabled = true
+      config.cache_dir = File.join(Dir.pwd, 'spec', 'support', 'cache')
+      config.services_config = File.join(Dir.pwd, 'spec', 'support', 'betamocks.yml')
     end
   end
 
@@ -13,7 +15,6 @@ RSpec.describe Betamocks::Configuration do
     context 'with a file that exists' do
       let(:expected_config) do
         {
-          cache_dir: 'spec/support/cache',
           services:
             [
               {
