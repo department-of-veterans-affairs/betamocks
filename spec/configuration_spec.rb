@@ -23,6 +23,10 @@ RSpec.describe Betamocks::Configuration do
               {
                 base_urls: ['bnb.data.bl.uk'],
                 endpoints: [{ method: :get, path: '/doc/resource/*' }]
+              },
+              {
+                base_urls: ['requestb.in'],
+                endpoints: [{ method: :post, path: '/tithviti', timestamp_regex: ['creationTime value="(\d{14})"'] }]
               }
             ]
         }
@@ -34,15 +38,30 @@ RSpec.describe Betamocks::Configuration do
     end
   end
 
-  describe '#mock_endpoint?' do
-    it 'responds as true if the endpoint is mocked' do
-      expect(
-        Betamocks.configuration.mock_endpoint?('bnb.data.bl.uk', :get, '/doc/resource/009407494.json')
-      ).to be_truthy
+  describe '#find_endpoint?' do
+    before(:each) do
+      allow(env).to receive(:url).and_return(url)
+      allow(env).to receive(:method).and_return(:get)
     end
 
-    it 'responds as false if the endpoint is not mocked' do
-      expect(Betamocks.configuration.mock_endpoint?('foo.com', :get, '/v2/bar.json')).to be_falsey
+    context 'with a mocked endpoint' do
+      let(:env) { double('Faraday::Env') }
+      let(:url) { URI('http://bnb.data.bl.uk/doc/resource/009407494.json') }
+
+      it 'responds as true if the endpoint is mocked' do
+        expect(
+          Betamocks.configuration.find_endpoint(env)
+        ).to_not be_nil
+      end
+    end
+
+    context 'with an unmocked endpoint' do
+      let(:env) { double('Faraday::Env') }
+      let(:url) { URI('http://foo.com/bar.json') }
+
+      it 'responds as false if the endpoint is not mocked' do
+        expect(Betamocks.configuration.find_endpoint(env)).to be_nil
+      end
     end
   end
 end

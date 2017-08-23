@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
-require 'adler32'
+require_relative 'checksum'
 
 module Betamocks
   class ResponseCache
-    attr_accessor :env, :file_path
+    attr_writer :env
+    attr_accessor :file_path
 
     def initialize(env)
       @env = env
@@ -21,11 +22,20 @@ module Betamocks
 
     private
 
+    def load_env
+      cached_env = YAML.load_file(@file_path)
+      @env.method = cached_env[:method]
+      @env.body = cached_env[:body]
+      @env.response_headers = cached_env[:headers]
+      @env.status = cached_env[:status]
+      @env
+    end
+
     def create_file_path
       dir_path = find_or_create_cache_dir
-      tail = File.basename(env.url.path)
-      checksum = "#{tail}_#{Adler32.checksum(env.to_s)}"
-      File.join(dir_path, "#{checksum}.yml")
+      tail = File.basename(@env.url.path)
+      file_name = "#{tail}_#{Checksum.generate(@env)}"
+      File.join(dir_path, "#{file_name}.yml")
     end
 
     def find_or_create_cache_dir
@@ -36,15 +46,6 @@ module Betamocks
       )
       FileUtils.mkdir_p(path) unless File.directory?(path)
       path
-    end
-
-    def load_env
-      cached_env = YAML.load_file(@file_path)
-      @env.method = cached_env[:method]
-      @env.body = cached_env[:body]
-      @env.response_headers = cached_env[:headers]
-      @env.status = cached_env[:status]
-      @env
     end
   end
 end

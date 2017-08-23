@@ -10,11 +10,10 @@ module Betamocks
       config[:cache_dir]
     end
 
-    def mock_endpoint?(host, method, path)
-      result = config[:services].select do |s|
-        s[:base_urls].include?(host) && endpoints_match_path(s[:endpoints], method, path)
-      end
-      !result.empty?
+    def find_endpoint(env)
+      service = config[:services].select { |s| s[:base_urls].include?(env.url.host) }.first
+      return nil unless service
+      service[:endpoints].select { |e| matches_path(e, env.method, env.url.path) }.first
     end
 
     def config
@@ -33,9 +32,8 @@ module Betamocks
       @base_urls ||= config[:services].map { |s| s[:base_urls] }.flatten
     end
 
-    def endpoints_match_path(endpoints, method, path)
-      result = endpoints.select { |e| /#{e[:path].gsub('/', '\/').gsub('*', '.*')}/ =~ path && e[:method] == method }
-      result.count
+    def matches_path(endpoint, method, path)
+      /#{endpoint[:path].gsub('/', '\/').gsub('*', '.*')}/ =~ path && endpoint[:method] == method
     end
   end
 end

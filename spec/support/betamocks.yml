@@ -12,3 +12,10 @@
   :endpoints:
   - :method: :get
     :path: "/doc/resource/*"
+- :base_urls:
+  - requestb.in
+  :endpoints:
+  - :method: :post
+    :path: "/tithviti"
+    :timestamp_regex:
+    - creationTime value="(\d{14})"
