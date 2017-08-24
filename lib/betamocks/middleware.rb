@@ -12,7 +12,7 @@ module Betamocks
       return super unless Betamocks.configuration.enabled
       @endpoint_config = Betamocks.configuration.find_endpoint(env)
       if @endpoint_config
-        @response_cache = Betamocks::ResponseCache.new(env)
+        @response_cache = Betamocks::ResponseCache.new(env: env, config: @endpoint_config)
         response = @response_cache.load_response
         return response if response
       end

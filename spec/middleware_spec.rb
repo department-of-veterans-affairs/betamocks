@@ -23,7 +23,7 @@ RSpec.describe Betamocks::Middleware do
       context 'with an uncached request' do
         let(:cache_path) do
           File.join(
-            'spec', 'support', 'cache', 'bnb.data.bl.uk', 'doc', 'resource', '009407494.json_09a2127d.yml'
+            'spec', 'support', 'cache', 'bnb.data.bl.uk', 'doc', 'resource', '009407494.json.yml'
           )
         end
 

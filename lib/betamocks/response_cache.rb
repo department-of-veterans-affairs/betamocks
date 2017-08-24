@@ -4,11 +4,12 @@ require_relative 'checksum'
 
 module Betamocks
   class ResponseCache
-    attr_writer :env, :file_name
+    attr_writer :config, :env, :file_name
 
-    def initialize(env)
+    def initialize(env:, config: nil)
       @env = env
-      @file_name = generate_file_name(env)
+      @config = config
+      @file_name = generate_file_name
     end
 
     def load_response
@@ -49,9 +50,9 @@ module Betamocks
       File.join(dir_path, @file_name)
     end
 
-    def generate_file_name(env)
-      tail = File.basename(env.url.path)
-      "#{tail}_#{Checksum.generate(env)}.yml"
+    def generate_file_name
+      tail = File.basename(@env.url.path)
+      @config[:cache_multiple_responses] ? "#{tail}_#{Checksum.generate(@env)}.yml" : "#{tail}.yml"
     end
   end
 end

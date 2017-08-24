@@ -27,7 +27,13 @@ RSpec.describe Betamocks::Configuration do
               },
               {
                 base_urls: ['requestb.in'],
-                endpoints: [{ method: :post, path: '/tithviti', timestamp_regex: ['creationTime value="(\d{14})"'] }]
+                endpoints: [
+                  {
+                    method: :post, path: '/tithviti',
+                    cache_multiple_responses: true,
+                    timestamp_regex: ['creationTime value="(\d{14})"']
+                  }
+                ]
               }
             ]
         }
