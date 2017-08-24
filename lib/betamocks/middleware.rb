@@ -20,7 +20,6 @@ module Betamocks
 
     def on_complete(env)
       cache_response(env) if @endpoint_config
-      env
     end
 
     private

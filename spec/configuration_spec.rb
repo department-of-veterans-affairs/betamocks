@@ -49,10 +49,9 @@ RSpec.describe Betamocks::Configuration do
       let(:env) { double('Faraday::Env') }
       let(:url) { URI('http://bnb.data.bl.uk/doc/resource/009407494.json') }
 
-      it 'responds as true if the endpoint is mocked' do
-        expect(
-          Betamocks.configuration.find_endpoint(env)
-        ).to_not be_nil
+      it 'returns the endpoint' do
+        endpoint = Betamocks.configuration.find_endpoint(env)
+        expect(endpoint).to eq({ method: :get, path: '/doc/resource/*' })
       end
     end
 
@@ -61,7 +60,7 @@ RSpec.describe Betamocks::Configuration do
       let(:url) { URI('http://foo.com/bar.json') }
 
       it 'responds as false if the endpoint is not mocked' do
-        expect(Betamocks.configuration.find_endpoint(env)).to be_nil
+        expect(Betamocks.configuration.find_endpoint(env)).to be_falsey
       end
     end
   end

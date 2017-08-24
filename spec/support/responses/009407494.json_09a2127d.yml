@@ -1,0 +1,20 @@
+---
+:method: :get
+:body: '{"format":"linked-data-api","version":"0.2","result":{"_about":"http:\/\/bnb.data.bl.uk\/doc\/resource\/009407494.json","license":"http:\/\/creativecommons.org\/publicdomain\/zero\/1.0\/","definition":"http:\/\/bnb.data.bl.uk\/api#resource","extendedMetadataVersion":"http:\/\/bnb.data.bl.uk\/doc\/resource\/009407494.json?_metadata=all%2Cviews%2Cformats%2Cexecution%2Cbindings%2Csite","inDataset":"http:\/\/bnb.data.bl.uk\/id\/data\/BNB","label":"Infinite
+  jest \/ David Foster Wallace","primaryTopic":{"_about":"http:\/\/bnb.data.bl.uk\/id\/resource\/009407494","hasExtent":"1079p.","creator":{"_about":"http:\/\/bnb.data.bl.uk\/id\/person\/WallaceDavidFoster","label":"Wallace,
+  David Foster"},"language":"http:\/\/lexvo.org\/id\/iso639-3\/eng","subject":[{"_about":"http:\/\/bnb.data.bl.uk\/id\/concept\/ddc\/e20\/813.54","label":"813.54"},{"_about":"http:\/\/bnb.data.bl.uk\/id\/concept\/lcsh\/CompulsivebehaviorFiction","label":"Compulsive
+  behavior--Fiction"},{"_about":"http:\/\/bnb.data.bl.uk\/id\/concept\/lcsh\/AddictsFiction","label":"Addicts--Fiction"}],"title":"Infinite
+  jest : a novel","ISBN10":"0316920045","hasCarrierType":{"_about":"http:\/\/rdaregistry.info\/termList\/RDACarrierType\/1049","label":"volume"},"hasContentType":{"_about":"http:\/\/rdaregistry.info\/termList\/RDAContentType\/1020","label":"text"},"hasMediaType":{"_about":"http:\/\/rdaregistry.info\/termList\/RDAMediaType\/1007","label":"unmediated"},"BNBNumber":"GB9653015","publication":{"_about":"http:\/\/bnb.data.bl.uk\/id\/resource\/009407494\/publicationevent\/BostonLondonLittleBrownandCompanyc1996","label":"Boston
+  ; London : Little, Brown and Company, c1996"},"type":["http:\/\/purl.org\/dc\/terms\/BibliographicResource","http:\/\/purl.org\/ontology\/bibo\/Book"],"label":"Infinite
+  jest \/ David Foster Wallace","sameAs":"http:\/\/bnb.data.bl.uk\/id\/resource\/GB9653015","isPrimaryTopicOf":"http:\/\/bnb.data.bl.uk\/doc\/resource\/009407494.json","page":{"_about":"http:\/\/explore.bl.uk\/primo_library\/libweb\/action\/search.do?vid=BLVU1%26fn=search%26vl%28freeText0%29=009407494","label":"009407494"}}}}'
+:headers:
+  date: Mon, 24 Jul 2017 22:04:09 GMT
+  server: Apache
+  access-control-allow-origin: "*"
+  last-modified: Mon, 24 Jul 2017 22:04:09 GMT
+  x-served-from-cache: 'false'
+  etag: b0cd74f0b49986e42b8ed2844f8a565a
+  content-length: '2100'
+  content-type: application/json
+  connection: close
+:status: 200
