@@ -52,24 +52,6 @@ RSpec.describe Betamocks::Middleware do
         end
       end
 
-      context 'with a service that does not exist' do
-        let(:conn) do
-          Faraday.new(url: 'http://va.service.that.timesout') do |faraday|
-            faraday.response :betamocks
-            faraday.adapter Faraday.default_adapter
-          end
-        end
-        let(:cache_path) do
-          File.join('spec', 'support', 'cache', 'va.service.that.timesout', 'v0', 'users', '42')
-        end
-
-        xit 'records a blank response' do
-          response = conn.get '/v0/users/42/forms'
-          expect(File).to exist(File.join(Dir.pwd, cache_path))
-          expect(response).to be_a(Faraday::Response)
-        end
-      end
-
       context 'with a request that include a timestamp in the body' do
         let(:conn) do
           Faraday.new(url: 'https://requestb.in/tithviti') do |faraday|

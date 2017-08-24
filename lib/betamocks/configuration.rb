@@ -7,7 +7,6 @@ module Betamocks
     attr_accessor :cache_dir, :enabled, :mocked_endpoints, :services_config
 
     def find_endpoint(env)
-      return nil unless @enabled
       service = service_by_host(env)
       return nil unless service
       service[:endpoints].select { |e| matches_path(e, env.method, env.url.path) }.first
