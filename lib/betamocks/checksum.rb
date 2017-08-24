@@ -27,7 +27,9 @@ module Betamocks
     end
 
     def self.filter_headers_string(env)
-      env.request_headers.reject { |_k, v| date_string? v }.to_s
+      headers = env.request_headers
+      headers.except!('date', 'authorization')
+      headers.reject { |_k, v| date_string? v }.to_s
     end
 
     def self.date_string?(string)

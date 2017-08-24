@@ -1,8 +1,8 @@
 # Betamocks
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/betamocks`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Betamocks is Faraday middleware that mocks APIs by recording and replaying requests. 
+It's especially useful for local development to mock out APIs that are behind a VPN (government),
+often go down (government), or when an API may not have a corresponding dev or staging environment (also government).
 
 ## Installation
 
@@ -22,7 +22,80 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Configuration
+
+In a location that gets loaded before your Faraday connections are initialized (e.g. a Rails initializer)
+configure the Betamocks `enabled`, `cache_dir`, and `services_config` settings:
+
+- __enabled__: globally turn Betamocks on `true` or off `false`
+- __cache_dir__: the location Betamocks will save its cached response YAML files
+- __services_config__: a YAML file that describes which services and endpoints to mock.
+
+``` ruby
+Betamocks.configure do |config|
+  config.enabled = true
+  config.cache_dir = File.join(Rails.root, 'config', 'betamocks', 'cache')
+  config.services_config = File.join(Rails.root, 'config', 'betamocks', 'betamocks.yml')
+end
+```
+
+#### Services config
+The services config is YAML file containing a list (array) of services. 
+Each item in the services list contains:
+- __base_urls__: one or more domains for each environment of the API.
+- __endpoints__: a list of endpoints within the API to be mocked (all others will not be mocked).
+Each endpoint will then describe its method and path.
+  - __method__: HTTP method as a symbol :get, :post, :put, etc.
+  - __path__: the path or URL fragment for the endpoint e.g. `/v0/users`.
+  Wildcards are allowed for varying parameters within a URL e.g. `/v0/users/*/forms`
+  will record both `/v0/users/42/forms` and `/v0/users/101/forms`.
+  
+```yaml
+:services:
+- :base_urls:
+  - va.service.that.timesout
+  - int.va.service.that.timesout
+  :endpoints:
+  - :method: :get
+    :path: "/v0/users/*/forms"
+- :base_urls:
+  - bnb.data.bl.uk
+  :endpoints:
+  - :method: :get
+    :path: "/doc/resource/*"
+```
+
+#### Special considerations for request bodies with timestamps
+Betamocks automatically records multiple unique responses per endpoint. 
+A response is considered unique if any of the following differ:
+- params within the url `/v0/users/42/forms` vs `/v0/users/101/forms`
+- request header values (other than 'Authorization' or 'Date' which are automatically stripped)
+- the request body
+If the body contains a timestamp that changes on every request, 
+even though the rest of the body remains the same, it will cause Betamocks to record
+a new cache file rather than loading the existing file. To get around this you can
+add one or more regular expressions to strip out the timestamp.
+
+For example SOAP request bodies often include a timestamp to ensure that a request is recent.
+
+```xml
+<versionCode code="3.0"/>
+<creationTime value="20161028101201"/>
+<interactionId extension="PRPA_IN201306UV02" root="2.16.840.1.113883.1.6"/>
+<processingCode code="T"/>
+```
+
+To remove the timestamp in `creationTime` include a regular expression that captures the value in the service config file
+in this case 14 digits `\d{14}` that follow `creationTime value=` or `creationTime value="(\d{14})"`:
+```yaml
+- :base_urls:
+  - api.vets.gov
+  :endpoints:
+  - :method: :post
+    :path: "/v0/stuffs"
+    :timestamp_regex:
+    - creationTime value="(\d{14})"
+```
 
 ## Development
 
