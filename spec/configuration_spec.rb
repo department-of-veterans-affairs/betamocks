@@ -65,4 +65,76 @@ RSpec.describe Betamocks::Configuration do
       end
     end
   end
+
+  describe '#enabled' do
+    context 'when the setting is true' do
+      before do
+        Betamocks.configure do |config|
+          config.enabled = true
+          config.cache_dir = File.join(Dir.pwd, 'spec', 'support', 'cache')
+          config.services_config = File.join(Dir.pwd, 'spec', 'support', 'betamocks.yml')
+        end
+      end
+
+      it 'enabled should be true' do
+        expect(Betamocks.configuration.enabled).to be true
+      end
+    end
+
+    context 'when the setting is "true"' do
+      before do
+        Betamocks.configure do |config|
+          config.enabled = 'true'
+          config.cache_dir = File.join(Dir.pwd, 'spec', 'support', 'cache')
+          config.services_config = File.join(Dir.pwd, 'spec', 'support', 'betamocks.yml')
+        end
+      end
+
+      it 'enabled should be true' do
+        expect(Betamocks.configuration.enabled).to be true
+      end
+    end
+
+    context 'when the setting is false' do
+      before do
+        Betamocks.configure do |config|
+          config.enabled = false
+          config.cache_dir = File.join(Dir.pwd, 'spec', 'support', 'cache')
+          config.services_config = File.join(Dir.pwd, 'spec', 'support', 'betamocks.yml')
+        end
+      end
+
+      it 'enabled should be false' do
+        expect(Betamocks.configuration.enabled).to be false
+      end
+    end
+
+    context 'when the setting is "false"' do
+      before do
+        Betamocks.configure do |config|
+          config.enabled = 'false'
+          config.cache_dir = File.join(Dir.pwd, 'spec', 'support', 'cache')
+          config.services_config = File.join(Dir.pwd, 'spec', 'support', 'betamocks.yml')
+        end
+      end
+
+      it 'enabled should be false' do
+        expect(Betamocks.configuration.enabled).to be false
+      end
+    end
+
+    context 'when the setting is nil' do
+      before do
+        Betamocks.configure do |config|
+          config.enabled = nil
+          config.cache_dir = File.join(Dir.pwd, 'spec', 'support', 'cache')
+          config.services_config = File.join(Dir.pwd, 'spec', 'support', 'betamocks.yml')
+        end
+      end
+
+      it 'enabled should be false' do
+        expect(Betamocks.configuration.enabled).to be false
+      end
+    end
+  end
 end

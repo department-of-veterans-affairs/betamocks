@@ -16,6 +16,10 @@ module Betamocks
       @config ||= load_config
     end
 
+    def enabled=(value)
+      @enabled = value.to_s == 'true'
+    end
+
     private
 
     def load_config
