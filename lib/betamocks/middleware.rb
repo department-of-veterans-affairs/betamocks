@@ -25,7 +25,6 @@ module Betamocks
     private
 
     def find_endpoint_config(env)
-      return nil unless Betamocks.configuration.enabled
       Betamocks.configuration.find_endpoint(env)
     end
 

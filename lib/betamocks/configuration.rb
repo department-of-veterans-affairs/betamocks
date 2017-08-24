@@ -7,7 +7,8 @@ module Betamocks
     attr_accessor :cache_dir, :enabled, :mocked_endpoints, :services_config
 
     def find_endpoint(env)
-      service = config[:services].select { |s| s[:base_urls].include?(env.url.host) }.first
+      return nil unless @enabled
+      service = service_by_host(env)
       return nil unless service
       service[:endpoints].select { |e| matches_path(e, env.method, env.url.path) }.first
     end
@@ -30,6 +31,10 @@ module Betamocks
 
     def base_urls
       @base_urls ||= config[:services].map { |s| s[:base_urls] }.flatten
+    end
+
+    def service_by_host(env)
+      config[:services].select { |s| s[:base_urls].include?(env.url.host) }.first
     end
 
     def matches_path(endpoint, method, path)
