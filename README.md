@@ -68,9 +68,10 @@ Each endpoint will then describe its method and path.
 #### Special considerations for request bodies with timestamps
 Betamocks automatically records multiple unique responses per endpoint. 
 A response is considered unique if any of the following differ:
-- params within the url `/v0/users/42/forms` vs `/v0/users/101/forms`
+- params within the url; `/v0/users/42/forms` vs `/v0/users/101/forms`
 - request header values (other than 'Authorization' or 'Date' which are automatically stripped)
 - the request body
+
 If the body contains a timestamp that changes on every request, 
 even though the rest of the body remains the same, it will cause Betamocks to record
 a new cache file rather than loading the existing file. To get around this you can
