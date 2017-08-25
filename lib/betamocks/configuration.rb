@@ -20,6 +20,11 @@ module Betamocks
       @enabled = value.to_s == 'true'
     end
 
+    def enabled
+      return false if [ENV['RAILS_ENV'], ENV['RACK_ENV']].include? 'test'
+      @enabled
+    end
+
     private
 
     def load_config

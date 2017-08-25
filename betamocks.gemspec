@@ -36,6 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'vcr'
   spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'climate_control'
 
   spec.add_dependency 'faraday', ['>= 0.7.4', '<= 0.12.2']
   spec.add_dependency 'activesupport', ['>= 4.2', '<= 6.0']

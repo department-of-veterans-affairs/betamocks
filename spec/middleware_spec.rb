@@ -4,7 +4,7 @@ require 'spec_helper'
 
 RSpec.describe Betamocks::Middleware do
   context 'with a valid config' do
-    before do
+    before(:each) do
       Betamocks.configure do |config|
         config.enabled = true
         config.cache_dir = File.join(Dir.pwd, 'spec', 'support', 'cache')
@@ -45,7 +45,7 @@ RSpec.describe Betamocks::Middleware do
 
         it 'loads the cached file' do
           VCR.use_cassette('infinite_jest') do
-            expect_any_instance_of(Betamocks::Middleware).to_not receive(:cache_response)
+            expect_any_instance_of(Betamocks::ResponseCache).to_not receive(:cache_response)
             response = conn.get '/doc/resource/009407494.json'
             expect(response).to be_a(Faraday::Response)
           end
@@ -97,35 +97,49 @@ RSpec.describe Betamocks::Middleware do
 
         it 'does not try to cache or load a response and passes it through' do
           VCR.use_cassette('infinite_jest') do
-            expect_any_instance_of(Betamocks::Middleware).to_not receive(:load_response)
-            expect_any_instance_of(Betamocks::Middleware).to_not receive(:cache_response)
+            expect_any_instance_of(Betamocks::ResponseCache).to_not receive(:load_response)
+            expect_any_instance_of(Betamocks::ResponseCache).to_not receive(:cache_response)
             response = conn.get '/doc/resource/009407494.json'
             expect(response).to be_a(Faraday::Response)
           end
         end
       end
 
-      after(:each) do
-        FileUtils.rm_rf(File.join(Dir.pwd, 'spec', 'support', 'cache'))
+      context 'in test environments' do
+        context 'in a rails test environment' do
+          it 'does not try to cache or load a response and passes it through' do
+            with_modified_env RAILS_ENV: 'test' do
+              VCR.use_cassette('infinite_jest') do
+                expect_any_instance_of(Betamocks::ResponseCache).to_not receive(:load_response)
+                expect_any_instance_of(Betamocks::ResponseCache).to_not receive(:cache_response)
+                response = conn.get '/doc/resource/009407494.json'
+                expect(response).to be_a(Faraday::Response)
+              end
+            end
+          end
+        end
+
+        context 'in a rack test environment' do
+          it 'does not try to cache or load a response and passes it through' do
+            with_modified_env RACK_ENV: 'test' do
+              VCR.use_cassette('infinite_jest') do
+                expect_any_instance_of(Betamocks::ResponseCache).to_not receive(:load_response)
+                expect_any_instance_of(Betamocks::ResponseCache).to_not receive(:cache_response)
+                response = conn.get '/doc/resource/009407494.json'
+                expect(response).to be_a(Faraday::Response)
+              end
+            end
+          end
+        end
       end
     end
   end
 
-  context 'without a config' do
-    let(:conn) do
-      Faraday.new(url: 'http://bnb.data.bl.uk') do |faraday|
-        faraday.response :betamocks
-        faraday.adapter Faraday.default_adapter
-      end
-    end
+  after(:each) do
+    FileUtils.rm_rf(File.join(Dir.pwd, 'spec', 'support', 'cache'))
+  end
 
-    it 'should allow request and responses to pass through' do
-      VCR.use_cassette('infinite_jest') do
-        expect_any_instance_of(Betamocks::Middleware).to_not receive(:load_response)
-        expect_any_instance_of(Betamocks::Middleware).to_not receive(:cache_response)
-        response = conn.get '/doc/resource/009407494.json'
-        expect(response).to be_a(Faraday::Response)
-      end
-    end
+  def with_modified_env(options, &block)
+    ClimateControl.modify(options, &block)
   end
 end

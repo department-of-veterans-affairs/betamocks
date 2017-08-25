@@ -3,6 +3,7 @@
 require 'bundler/setup'
 require 'betamocks'
 require 'vcr'
+require 'climate_control'
 
 VCR.configure do |config|
   config.cassette_library_dir = 'spec/support/vcr_cassettes'
