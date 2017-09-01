@@ -23,7 +23,7 @@ RSpec.describe Betamocks::Middleware do
       context 'with an uncached request' do
         let(:cache_path) do
           File.join(
-            'spec', 'support', 'cache', 'bnb.data.bl.uk', 'doc', 'resource', '009407494.json.yml'
+            'spec', 'support', 'cache', 'doc', 'resource', '009407494.json.yml'
           )
         end
 
@@ -37,8 +37,8 @@ RSpec.describe Betamocks::Middleware do
 
       context 'with a cached request' do
         before do
-          cache_dir = File.join(Dir.pwd, 'spec', 'support', 'cache', 'bnb.data.bl.uk', 'doc', 'resource')
-          cached = File.join(Dir.pwd, 'spec', 'support', 'responses', '009407494.json_09a2127d.yml')
+          cache_dir = File.join(Dir.pwd, 'spec', 'support', 'cache', 'doc', 'resource')
+          cached = File.join(Dir.pwd, 'spec', 'support', 'responses', '009407494.json.yml')
           FileUtils.mkdir_p(cache_dir)
           FileUtils.cp(cached, cache_dir)
         end
@@ -69,7 +69,7 @@ RSpec.describe Betamocks::Middleware do
          </env:Envelope>"
         end
         let(:cache_path) do
-          File.join('spec', 'support', 'cache', 'requestb.in', 'tithviti_aaeb61ac.yml')
+          File.join('spec', 'support', 'cache', 'requestbin', 'post', 'tithviti_aaeb61ac.yml')
         end
 
         it 'has the expected file name' do

@@ -18,18 +18,19 @@ RSpec.describe Betamocks::Configuration do
           services:
             [
               {
-                base_urls: ['va.service.that.timesout', 'int.va.service.that.timesout'],
-                endpoints: [{ method: :get, path: '/v0/users/*/forms' }]
+                base_uris: ['va.service.that.timesout', 'int.va.service.that.timesout'],
+                endpoints: [{ method: :get, path: '/v0/users/*/forms', file_path: 'users/forms' }]
               },
               {
-                base_urls: ['bnb.data.bl.uk'],
-                endpoints: [{ method: :get, path: '/doc/resource/*' }]
+                base_uris: ['bnb.data.bl.uk'],
+                endpoints: [{ method: :get, path: '/doc/resource/*', file_path: 'doc/resource' }]
               },
               {
-                base_urls: ['requestb.in'],
+                base_uris: ['requestb.in'],
                 endpoints: [
                   {
                     method: :post, path: '/tithviti',
+                    file_path: 'requestbin/post',
                     cache_multiple_responses: true,
                     timestamp_regex: ['creationTime value="(\d{14})"']
                   }
@@ -57,7 +58,7 @@ RSpec.describe Betamocks::Configuration do
 
       it 'returns the endpoint' do
         endpoint = Betamocks.configuration.find_endpoint(env)
-        expect(endpoint).to eq({ method: :get, path: '/doc/resource/*' })
+        expect(endpoint).to eq(method: :get, path: '/doc/resource/*', file_path: 'doc/resource')
       end
     end
 

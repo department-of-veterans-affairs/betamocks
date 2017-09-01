@@ -38,7 +38,7 @@ module Betamocks
     end
 
     def service_by_host(env)
-      config[:services].select { |s| s[:base_urls].include?(env.url.host) }.first
+      config[:services].select { |s| s[:base_uris].include?(env.url.host) }.first
     end
 
     def matches_path(endpoint, method, path)

@@ -41,8 +41,7 @@ module Betamocks
     def dir_path
       File.join(
         Betamocks.configuration.cache_dir,
-        @env.url.host,
-        @env.url.path.split('/')[0...-1]
+        @config[:file_path]
       )
     end
 
