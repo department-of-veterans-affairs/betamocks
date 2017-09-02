@@ -80,6 +80,19 @@ RSpec.describe Betamocks::Middleware do
         end
       end
 
+      context 'when the endpoint is configured to return an error' do
+        let(:conn) do
+          Faraday.new(url: 'http://va.service.that.timesout') do |faraday|
+            faraday.response :betamocks
+            faraday.adapter Faraday.default_adapter
+          end
+        end
+
+        it 'raises a Faraday::ClientError' do
+          expect { conn.get '/v0/users/42/forms' }.to raise_error Faraday::ClientError
+        end
+      end
+
       context 'when betamocks is disabled' do
         before do
           Betamocks.configure do |config|

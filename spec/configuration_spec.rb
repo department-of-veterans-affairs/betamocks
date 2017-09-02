@@ -19,7 +19,12 @@ RSpec.describe Betamocks::Configuration do
             [
               {
                 base_uris: ['va.service.that.timesout', 'int.va.service.that.timesout'],
-                endpoints: [{ method: :get, path: '/v0/users/*/forms', file_path: 'users/forms' }]
+                endpoints: [{
+                  method: :get,
+                  path: '/v0/users/*/forms',
+                  file_path: 'users/forms',
+                  error: { status: 400, body: 'foo' }
+                }]
               },
               {
                 base_uris: ['bnb.data.bl.uk'],

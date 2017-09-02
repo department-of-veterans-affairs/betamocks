@@ -12,6 +12,7 @@ module Betamocks
       return super unless Betamocks.configuration.enabled
       @endpoint_config = Betamocks.configuration.find_endpoint(env)
       if @endpoint_config
+        raise_error(@endpoint_config)
         @response_cache = Betamocks::ResponseCache.new(env: env, config: @endpoint_config)
         response = @response_cache.load_response
         return response if response
@@ -22,6 +23,23 @@ module Betamocks
     def on_complete(env)
       return unless Betamocks.configuration.enabled
       @response_cache.save_response(env) if @endpoint_config
+    end
+
+    def raise_error(endpoint_config)
+      error = endpoint_config[:error]
+      return unless error
+
+      status = error&.dig(:status).to_i
+      body = error&.dig(:body)
+
+      case status
+      when 404
+        raise Faraday::Error::ResourceNotFound, { status: status, body: body }
+      when 407
+        raise Faraday::Error::ConnectionFailed, %{407 "Proxy Authentication Required "}
+      else
+        raise Faraday::Error::ClientError, { status: status, body: body }
+      end
     end
   end
 end
