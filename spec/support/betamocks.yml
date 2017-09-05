@@ -1,5 +1,7 @@
 ---
 :services:
+
+# fake va service
 - :base_uris:
   - va.service.that.timesout
   - int.va.service.that.timesout
@@ -10,12 +12,16 @@
     :error:
       :status: 400
       :body: 'foo'
+
+# book service
 - :base_uris:
   - bnb.data.bl.uk
   :endpoints:
   - :method: :get
     :path: "/doc/resource/*"
     :file_path: "doc/resource"
+
+# requestb.in
 - :base_uris:
   - requestb.in
   :endpoints:

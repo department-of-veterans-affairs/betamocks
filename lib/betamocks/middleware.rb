@@ -12,7 +12,7 @@ module Betamocks
       return super unless Betamocks.configuration.enabled
       @endpoint_config = Betamocks.configuration.find_endpoint(env)
       if @endpoint_config
-        raise_error(@endpoint_config) if @endpoint_config[:error]
+        raise_error(env, @endpoint_config) if @endpoint_config[:error]
         @response_cache = Betamocks::ResponseCache.new(env: env, config: @endpoint_config)
         response = @response_cache.load_response
         return response if response
@@ -25,9 +25,11 @@ module Betamocks
       @response_cache.save_response(env) if @endpoint_config
     end
 
-    def raise_error(endpoint_config)
+    def raise_error(env, endpoint_config)
       status = endpoint_config.dig(:error, :status).to_i
       body = endpoint_config.dig(:error, :body)
+
+      Betamocks.logger.info "raising a mock #{status} error for #{env.url}"
 
       case status
       when 404

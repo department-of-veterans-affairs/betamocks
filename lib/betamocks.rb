@@ -7,15 +7,21 @@ require 'faraday'
 
 module Betamocks
   class << self
-    attr_writer :configuration
-  end
+    attr_writer :configuration, :logger
 
-  def self.configuration
-    @configuration ||= Configuration.new
-  end
+    def configuration
+      @configuration ||= Configuration.new
+    end
 
-  def self.configure
-    yield(configuration)
+    def configure
+      yield(configuration)
+    end
+
+    def logger
+      @logger ||= Logger.new($stdout).tap do |log|
+        log.progname = self.name
+      end
+    end
   end
 end
 
