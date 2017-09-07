@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'checksum'
+require_relative 'uid'
 
 module Betamocks
   class ResponseCache
@@ -51,7 +51,7 @@ module Betamocks
 
     def generate_file_name
       tail = File.basename(@env.url.path)
-      @config[:cache_multiple_responses] ? "#{tail}_#{Checksum.generate(@env)}.yml" : "#{tail}.yml"
+      @config.dig(:cache_multiple_responses) ? "#{tail}_#{Uid.new(@env).generate}.yml" : "#{tail}.yml"
     end
   end
 end

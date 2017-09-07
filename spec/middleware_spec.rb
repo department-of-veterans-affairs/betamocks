@@ -52,30 +52,83 @@ RSpec.describe Betamocks::Middleware do
         end
       end
 
-      context 'with a request that include a timestamp in the body' do
+      context 'when multiple response caching is enabled' do
         let(:conn) do
-          Faraday.new(url: 'https://requestb.in/tithviti') do |faraday|
+          Faraday.new(url: 'https://requestb.in') do |faraday|
             faraday.response :betamocks
             faraday.adapter Faraday.default_adapter
           end
         end
-        let(:xml) do
-          "<env:Envelope xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\">
+
+        context 'with a request that includes the identifier in the request body' do
+          let(:xml) do
+            "<env:Envelope xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\">
            <env:Body>
+             <livingSubjectId>
+               <value root=\"2.16.840.1.113883.4.1\" extension=\"111223333\" />
+             </livingSubjectId>
              <id extension=\"WSDOC1610281012015841158653421\" root=\"2.16.840.1.113883.4.349\"/>
-             <creationTime value=\"#{Time.now.utc.strftime('%Y%m%d%H%M%S')}\"/>
              <versionCode code=\"3.0\"/>
            </env:Body>
          </env:Envelope>"
-        end
-        let(:cache_path) do
-          File.join('spec', 'support', 'cache', 'requestbin', 'post', 'tithviti_aaeb61ac.yml')
+          end
+          let(:cache_path) do
+            File.join('spec', 'support', 'cache', 'requestbin', 'tithviti_111223333.yml')
+          end
+
+          it 'has the expected file name' do
+            VCR.use_cassette('request_bin_post') do
+              conn.post '/tithviti', xml
+              expect(File).to exist(File.join(Dir.pwd, cache_path))
+            end
+          end
         end
 
-        it 'has the expected file name' do
-          VCR.use_cassette('request_bin_post') do
-            conn.post '/tithviti', xml
-            expect(File).to exist(File.join(Dir.pwd, cache_path))
+        context 'with a request that includes the identifier in the request headers' do
+          let(:cache_path) do
+            File.join('spec', 'support', 'cache', 'requestbin', '1gv9b4e1_1607472595.yml')
+          end
+
+          it 'has the expected file name' do
+            VCR.use_cassette('request_bin_headers') do
+              conn.get '/1gv9b4e1' do |req|
+                req.headers['va_eauth_dodedipnid'] = '1607472595'
+              end
+              expect(File).to exist(File.join(Dir.pwd, cache_path))
+            end
+          end
+        end
+
+        context 'with a request that includes the identifier in the querystring' do
+          let(:cache_path) do
+            File.join('spec', 'support', 'cache', 'requestbin', '1obp6rj1_2776f8b0-93eb-11e7-abc4-cec278b6b50a.yml')
+          end
+
+          it 'has the expected file name' do
+            VCR.use_cassette('request_bin_querystring') do
+              conn.get '/1obp6rj1?uuid=2776f8b0-93eb-11e7-abc4-cec278b6b50a'
+              expect(File).to exist(File.join(Dir.pwd, cache_path))
+            end
+          end
+        end
+
+        context 'with a request that includes the identifier in the url' do
+          let(:conn) do
+            Faraday.new(url: 'https://callook.info') do |faraday|
+              faraday.response :betamocks
+              faraday.adapter Faraday.default_adapter
+            end
+          end
+
+          let(:cache_path) do
+            File.join('spec', 'support', 'cache', 'callook', 'json_W1AW.yml')
+          end
+
+          it 'has the expected file name' do
+            VCR.use_cassette('callook_url') do
+              conn.get '/W1AW/json'
+              expect(File).to exist(File.join(Dir.pwd, cache_path))
+            end
           end
         end
       end

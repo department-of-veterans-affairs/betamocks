@@ -33,11 +33,11 @@ module Betamocks
 
       case status
       when 404
-        raise Faraday::Error::ResourceNotFound, { status: status, body: body }
+        raise Faraday::Error::ResourceNotFound, status: status, body: body
       when 407
-        raise Faraday::Error::ConnectionFailed, %{407 "Proxy Authentication Required "}
+        raise Faraday::Error::ConnectionFailed, '407 "Proxy Authentication Required"'
       else
-        raise Faraday::Error::ClientError, { status: status, body: body }
+        raise Faraday::Error::ClientError, status: status, body: body
       end
     end
   end

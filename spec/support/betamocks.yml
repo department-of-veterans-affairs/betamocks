@@ -27,7 +27,30 @@
   :endpoints:
   - :method: :post
     :path: "/tithviti"
-    :file_path: "requestbin/post"
-    :cache_multiple_responses: true
-    :timestamp_regex:
-    - creationTime value="(\d{14})"
+    :file_path: "requestbin"
+    :cache_multiple_responses:
+      :uid_location: body
+      :uid_locator: 'root="2.16.840.1.113883.4.1" extension="(\d{9})"'
+  - :method: :get
+    :path: "/1gv9b4e1"
+    :file_path: "requestbin"
+    :cache_multiple_responses:
+      :uid_location: header
+      :uid_locator: 'va_eauth_dodedipnid'
+  - :method: :get
+    :path: "/1obp6rj1"
+    :file_path: "requestbin"
+    :cache_multiple_responses:
+      :uid_location: query
+      :uid_locator: 'uuid'
+
+# callook.info
+- :base_uris:
+  - callook.info
+  :endpoints:
+  - :method: :get
+    :path: "/W1AW/json"
+    :file_path: "callook"
+    :cache_multiple_responses:
+      :uid_location: url
+      :uid_locator: '\/(.+)\/json'

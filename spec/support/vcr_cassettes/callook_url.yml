@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://callook.info/W1AW/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.12.2
+  response:
+    status:
+      code: 200
+      message: 
+    headers:
+      server:
+      - nginx/1.12.1
+      date:
+      - Thu, 07 Sep 2017 17:20:24 GMT
+      content-type:
+      - application/json; charset=utf-8
+      transfer-encoding:
+      - chunked
+      connection:
+      - close
+      x-powered-by:
+      - PHP/7.1.9
+      strict-transport-security:
+      - max-age=31536000
+    body:
+      encoding: ASCII-8BIT
+      string: "{\n\t\"status\": \"VALID\",\n\t\"type\": \"CLUB\",\n\t\"current\":
+        {\n\t\t\"callsign\": \"W1AW\",\n\t\t\"operClass\": \"\"\n\t},\n\t\"previous\":
+        {\n\t\t\"callsign\": \"\",\n\t\t\"operClass\": \"\"\n\t},\n\t\"trustee\":
+        {\n\t\t\"callsign\": \"NJ1Q\",\n\t\t\"name\": \"CARCIA III, JOSEPH P\"\n\t},\n\t\"name\":
+        \"ARRL HQ OPERATORS CLUB\",\n\t\"address\": {\n\t\t\"line1\": \"225 MAIN ST\",\n\t\t\"line2\":
+        \"NEWINGTON, CT 06111\",\n\t\t\"attn\": \"ATTN: JOSEPH P CARCIA III\"\n\t},\n\t\"location\":
+        {\n\t\t\"latitude\": \"41.71464\",\n\t\t\"longitude\": \"-72.7285\",\n\t\t\"gridsquare\":
+        \"FN31pr\"\n\t},\n\t\"otherInfo\": {\n\t\t\"grantDate\": \"12/02/2010\",\n\t\t\"expiryDate\":
+        \"02/26/2021\",\n\t\t\"lastActionDate\": \"04/07/2016\",\n\t\t\"frn\": \"0004511143\",\n\t\t\"ulsUrl\":
+        \"http://wireless2.fcc.gov/UlsApp/UlsSearch/license.jsp?licKey=780866\"\n\t}\n}"
+    http_version: 
+  recorded_at: Thu, 07 Sep 2017 17:20:28 GMT
+recorded_with: VCR 3.0.3

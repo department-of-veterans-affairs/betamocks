@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://requestb.in/1obp6rj1?uuid=2776f8b0-93eb-11e7-abc4-cec278b6b50a
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.12.2
+  response:
+    status:
+      code: 200
+      message: 
+    headers:
+      date:
+      - Thu, 07 Sep 2017 16:43:15 GMT
+      content-type:
+      - text/html; charset=utf-8
+      transfer-encoding:
+      - chunked
+      connection:
+      - close
+      set-cookie:
+      - __cfduid=d3754455d04767fd89d4be00a8d16f9341504802592; expires=Fri, 07-Sep-18
+        16:43:12 GMT; path=/; domain=.requestb.in; HttpOnly
+      sponsored-by:
+      - https://www.runscope.com
+      via:
+      - 1.1 vegur
+      strict-transport-security:
+      - max-age=15552000
+      x-content-type-options:
+      - nosniff
+      server:
+      - cloudflare-nginx
+      cf-ray:
+      - 39ab202a28837700-LAX
+    body:
+      encoding: ASCII-8BIT
+      string: ok
+    http_version: 
+  recorded_at: Thu, 07 Sep 2017 16:43:19 GMT
+recorded_with: VCR 3.0.3
