@@ -31,7 +31,7 @@ module Betamocks
       when :url
         @env.url.path[/#{locator}/, 1]
       else
-        message = "#{location} is not a valid location for a uid try 'body', 'headers', or 'uri' instead"
+        message = "#{location} is not a valid location for a uid try 'body', 'headers', 'query', or 'url' instead"
         raise ArgumentError, message
       end
     end
