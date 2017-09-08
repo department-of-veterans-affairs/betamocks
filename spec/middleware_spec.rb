@@ -73,7 +73,7 @@ RSpec.describe Betamocks::Middleware do
          </env:Envelope>"
           end
           let(:cache_path) do
-            File.join('spec', 'support', 'cache', 'multi', 'body_111223333.yml')
+            File.join('spec', 'support', 'cache', 'multi', 'body', '111223333.yml')
           end
 
           it 'has the expected file name' do
@@ -86,7 +86,7 @@ RSpec.describe Betamocks::Middleware do
 
         context 'with a request that includes the identifier in the request headers' do
           let(:cache_path) do
-            File.join('spec', 'support', 'cache', 'multi', 'header_1607472595.yml')
+            File.join('spec', 'support', 'cache', 'multi', 'header', '1607472595.yml')
           end
 
           it 'has the expected file name' do
@@ -101,7 +101,7 @@ RSpec.describe Betamocks::Middleware do
 
         context 'with a request that includes the identifier in the querystring' do
           let(:cache_path) do
-            File.join('spec', 'support', 'cache', 'multi', 'query_2776f8b0-93eb-11e7-abc4-cec278b6b50a.yml')
+            File.join('spec', 'support', 'cache', 'multi', 'query', '2776f8b0-93eb-11e7-abc4-cec278b6b50a.yml')
           end
 
           it 'has the expected file name' do
@@ -121,7 +121,7 @@ RSpec.describe Betamocks::Middleware do
           end
 
           let(:cache_path) do
-            File.join('spec', 'support', 'cache', 'multi', 'url_W1AW.yml')
+            File.join('spec', 'support', 'cache', 'multi', 'url', 'W1AW.yml')
           end
 
           it 'has the expected file name' do
