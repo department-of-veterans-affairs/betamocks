@@ -32,7 +32,7 @@ RSpec.describe Betamocks::Configuration do
 
         it 'returns the endpoint' do
           endpoint = Betamocks.configuration.find_endpoint(env)
-          expect(endpoint).to eq(method: :get, path: '/doc/resource/*', file_path: 'doc/resource')
+          expect(endpoint).to eq(method: :get, path: '/doc/resource/*', file_path: 'bnb/book')
         end
       end
 

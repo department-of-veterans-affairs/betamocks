@@ -23,7 +23,7 @@ RSpec.describe Betamocks::Middleware do
       context 'with an uncached request' do
         let(:cache_path) do
           File.join(
-            'spec', 'support', 'cache', 'doc', 'resource', '009407494.json.yml'
+            'spec', 'support', 'cache', 'bnb', 'book.yml'
           )
         end
 
@@ -37,8 +37,8 @@ RSpec.describe Betamocks::Middleware do
 
       context 'with a cached request' do
         before do
-          cache_dir = File.join(Dir.pwd, 'spec', 'support', 'cache', 'doc', 'resource')
-          cached = File.join(Dir.pwd, 'spec', 'support', 'responses', '009407494.json.yml')
+          cache_dir = File.join(Dir.pwd, 'spec', 'support', 'cache', 'bnb')
+          cached = File.join(Dir.pwd, 'spec', 'support', 'responses', 'book.yml')
           FileUtils.mkdir_p(cache_dir)
           FileUtils.cp(cached, cache_dir)
         end
@@ -73,7 +73,7 @@ RSpec.describe Betamocks::Middleware do
          </env:Envelope>"
           end
           let(:cache_path) do
-            File.join('spec', 'support', 'cache', 'requestbin', 'tithviti_111223333.yml')
+            File.join('spec', 'support', 'cache', 'multi', 'body_111223333.yml')
           end
 
           it 'has the expected file name' do
@@ -86,7 +86,7 @@ RSpec.describe Betamocks::Middleware do
 
         context 'with a request that includes the identifier in the request headers' do
           let(:cache_path) do
-            File.join('spec', 'support', 'cache', 'requestbin', '1gv9b4e1_1607472595.yml')
+            File.join('spec', 'support', 'cache', 'multi', 'header_1607472595.yml')
           end
 
           it 'has the expected file name' do
@@ -101,7 +101,7 @@ RSpec.describe Betamocks::Middleware do
 
         context 'with a request that includes the identifier in the querystring' do
           let(:cache_path) do
-            File.join('spec', 'support', 'cache', 'requestbin', '1obp6rj1_2776f8b0-93eb-11e7-abc4-cec278b6b50a.yml')
+            File.join('spec', 'support', 'cache', 'multi', 'query_2776f8b0-93eb-11e7-abc4-cec278b6b50a.yml')
           end
 
           it 'has the expected file name' do
@@ -121,7 +121,7 @@ RSpec.describe Betamocks::Middleware do
           end
 
           let(:cache_path) do
-            File.join('spec', 'support', 'cache', 'callook', 'json_W1AW.yml')
+            File.join('spec', 'support', 'cache', 'multi', 'url_W1AW.yml')
           end
 
           it 'has the expected file name' do

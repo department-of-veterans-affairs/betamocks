@@ -41,7 +41,7 @@ module Betamocks
     def dir_path
       File.join(
         Betamocks.configuration.cache_dir,
-        @config[:file_path]
+        @config[:file_path].split('/')[0...-1]
       )
     end
 
@@ -50,8 +50,8 @@ module Betamocks
     end
 
     def generate_file_name
-      tail = File.basename(@env.url.path)
-      @config.dig(:cache_multiple_responses) ? "#{tail}_#{Uid.new(@env).generate}.yml" : "#{tail}.yml"
+      name = @config[:file_path].split('/').last
+      @config.dig(:cache_multiple_responses) ? "#{name}_#{Uid.new(@env).generate}.yml" : "#{name}.yml"
     end
   end
 end

@@ -8,7 +8,7 @@
   :endpoints:
   - :method: :get
     :path: "/v0/users/*/forms"
-    :file_path: "users/forms"
+    :file_path: "users/form"
     :error:
       :status: 400
       :body: 'foo'
@@ -19,7 +19,7 @@
   :endpoints:
   - :method: :get
     :path: "/doc/resource/*"
-    :file_path: "doc/resource"
+    :file_path: "bnb/book"
 
 # requestb.in
 - :base_uris:
@@ -27,19 +27,19 @@
   :endpoints:
   - :method: :post
     :path: "/tithviti"
-    :file_path: "requestbin"
+    :file_path: "multi/body"
     :cache_multiple_responses:
       :uid_location: body
       :uid_locator: 'root="2.16.840.1.113883.4.1" extension="(\d{9})"'
   - :method: :get
     :path: "/1gv9b4e1"
-    :file_path: "requestbin"
+    :file_path: "multi/header"
     :cache_multiple_responses:
       :uid_location: header
       :uid_locator: 'va_eauth_dodedipnid'
   - :method: :get
     :path: "/1obp6rj1"
-    :file_path: "requestbin"
+    :file_path: "multi/query"
     :cache_multiple_responses:
       :uid_location: query
       :uid_locator: 'uuid'
@@ -50,7 +50,7 @@
   :endpoints:
   - :method: :get
     :path: "/W1AW/json"
-    :file_path: "callook"
+    :file_path: "multi/url"
     :cache_multiple_responses:
       :uid_location: url
       :uid_locator: '\/(.+)\/json'
