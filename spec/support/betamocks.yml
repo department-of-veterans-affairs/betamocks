@@ -2,9 +2,7 @@
 :services:
 
 # fake va service
-- :base_uris:
-  - va.service.that.timesout
-  - int.va.service.that.timesout
+- :base_uri: va.service.that.timesout
   :endpoints:
   - :method: :get
     :path: "/v0/users/*/forms"
@@ -14,16 +12,14 @@
       :body: 'foo'
 
 # book service
-- :base_uris:
-  - bnb.data.bl.uk
+- :base_uri: bnb.data.bl.uk
   :endpoints:
   - :method: :get
     :path: "/doc/resource/*"
     :file_path: "bnb/book"
 
 # requestb.in
-- :base_uris:
-  - requestb.in
+- :base_uri: requestb.in
   :endpoints:
   - :method: :post
     :path: "/tithviti"
@@ -45,8 +41,7 @@
       :uid_locator: 'uuid'
 
 # callook.info
-- :base_uris:
-  - callook.info
+- :base_uri: callook.info
   :endpoints:
   - :method: :get
     :path: "/W1AW/json"
