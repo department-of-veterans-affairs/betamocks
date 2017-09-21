@@ -30,7 +30,7 @@ module Betamocks
     def load_config
       raise ArgumentError, 'config.services_config not set' unless @services_config
       raise IOError, 'config.services_config file not found' unless File.exist? @services_config
-      YAML.load_file(@services_config)
+      YAML.load(ERB.new(File.read(@services_config)).result)
     end
 
     def base_urls
