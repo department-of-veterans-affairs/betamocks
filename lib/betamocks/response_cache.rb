@@ -36,6 +36,9 @@ module Betamocks
       @env.response_headers = cached_env[:headers]
       @env.status = cached_env[:status]
       @env
+    rescue Psych::SyntaxError => e
+      Betamocks.logger.error "error loading cache file: #{e.message}"
+      raise e
     end
 
     def dir_path
