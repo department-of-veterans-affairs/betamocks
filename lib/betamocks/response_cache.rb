@@ -13,6 +13,7 @@ module Betamocks
     end
 
     def load_response
+      raise IOError, "Betamocks cache_dir: [#{Betamocks.configuration.cache_dir}], does not exist" unless File.directory?(Betamocks.configuration.cache_dir)
       Faraday::Response.new(load_env) if File.exist?(file_path)
     end
 
