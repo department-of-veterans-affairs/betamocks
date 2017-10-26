@@ -22,7 +22,7 @@ module Betamocks
     end
 
     def on_complete(env)
-      return unless Betamocks.configuration.enabled
+      return unless Betamocks.configuration.enabled && Betamocks.configuration.mode == Betamocks::Configuration::RECORDING
       @response_cache.save_response(env) if @endpoint_config
     end
 

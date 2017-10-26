@@ -15,7 +15,7 @@ module Betamocks
     def load_response(file_name = nil)
       raise IOError, "Betamocks cache_dir: [#{Betamocks.configuration.cache_dir}], does not exist" unless File.directory?(Betamocks.configuration.cache_dir)
       raise IOError, "Betamocks file does not exist: [#{file_path(file_name)}]" if !file_name.nil? && !File.exist?(file_path(file_name))
-      Faraday::Response.new(load_env) if File.exist?(file_path(file_name))
+      Faraday::Response.new(load_env(file_name)) if File.exist?(file_path(file_name))
     end
 
     def save_response(env)
@@ -36,8 +36,8 @@ module Betamocks
 
     private
 
-    def load_env
-      cached_env = YAML.load_file(file_path)
+    def load_env(file_name = nil)
+      cached_env = YAML.load_file(file_path(file_name))
       @env.method = cached_env[:method]
       @env.body = cached_env[:body]
       @env.response_headers = cached_env[:headers]

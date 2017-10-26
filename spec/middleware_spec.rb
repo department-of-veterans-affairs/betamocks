@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'byebug'
 
 RSpec.describe Betamocks::Middleware do
   context 'with a valid config' do
     before(:each) do
       Betamocks.configure do |config|
         config.enabled = true
+        config.mode = Betamocks::Configuration::RECORDING
         config.cache_dir = File.join(Dir.pwd, 'spec', 'support', 'cache')
         config.services_config = File.join(Dir.pwd, 'spec', 'support', 'betamocks.yml')
       end
@@ -38,16 +40,14 @@ RSpec.describe Betamocks::Middleware do
         end
 
         context 'in PLAYBACK mode' do
-          before { Betamocks.configure { |config| config.mode = Betamocks::Configuration::PLAYBACK } }
+          before do
+            Betamocks.configure { |config| config.mode = Betamocks::Configuration::PLAYBACK }
+          end
 
-          it 'responds with default'
           it 'raises an exception when no default exists' do
             VCR.use_cassette('infinite_jest') do
               expect{conn.get '/doc/resource/111111111.json'}.to raise_error(IOError)
             end
-          end
-          it 'does not create a cache file' do
-
           end
         end
       end
@@ -137,14 +137,36 @@ RSpec.describe Betamocks::Middleware do
             end
           end
 
-          let(:cache_path) do
-            File.join('spec', 'support', 'cache', 'multi', 'url', 'W1AW.yml')
+          let(:cache_dir) do
+            File.join(Dir.pwd, 'spec', 'support', 'cache', 'multi', 'url')
+          end
+          let(:cache_path) { File.join(cache_dir, 'W1AW.yml') }
+          let(:default_file) { File.join(Dir.pwd, 'spec', 'support', 'responses', 'default.yml') }
+
+          context 'in RECORDING mode' do
+            before { Betamocks.configure { |config| config.mode = Betamocks::Configuration::RECORDING } }
+
+            it 'saves the expected file name' do
+              VCR.use_cassette('callook_url') do
+                conn.get '/W1AW/json'
+                expect(File).to exist(File.join(cache_path))
+              end
+            end
           end
 
-          it 'has the expected file name' do
-            VCR.use_cassette('callook_url') do
-              conn.get '/W1AW/json'
-              expect(File).to exist(File.join(Dir.pwd, cache_path))
+          context 'in PLAYBACK mode' do
+            before do
+              Betamocks.configure { |config| config.mode = Betamocks::Configuration::PLAYBACK }
+              FileUtils.mkdir_p(cache_dir)
+              FileUtils.cp(default_file, cache_dir)
+            end
+
+            it 'responds with default' do
+              VCR.use_cassette('callook_url') do
+                response = conn.get '/W1AW/json'
+                expect(File).to_not exist(cache_path)
+                expect(response.status).to eq(404)
+              end
             end
           end
         end
