@@ -37,6 +37,7 @@ Betamocks.configure do |config|
   config.enabled = true
   config.cache_dir = File.join(Rails.root, 'config', 'betamocks', 'cache')
   config.services_config = File.join(Rails.root, 'config', 'betamocks', 'betamocks.yml')
+  config.mode = Betamocks::Configuration::RECORDING
 end
 ```
 
