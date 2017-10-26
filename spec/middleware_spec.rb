@@ -202,7 +202,7 @@ RSpec.describe Betamocks::Middleware do
   end
 
   after(:each) do
-    FileUtils.rm_rf(File.join(Dir.pwd, 'spec', 'support', 'cache'))
+    FileUtils.rm_rf(Dir.glob(File.join(Dir.pwd, 'spec', 'support', 'cache', '*')))
   end
 
   def with_modified_env(options, &block)
