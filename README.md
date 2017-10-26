@@ -30,6 +30,7 @@ configure the Betamocks `enabled`, `cache_dir`, and `services_config` settings:
 - __enabled__: globally turn Betamocks on `true` or off `false`
 - __cache_dir__: the location Betamocks will save its cached response YAML files
 - __services_config__: a YAML file that describes which services and endpoints to mock.
+- __mode__: Either `RECORDING` or `PLAYBACK`.  In `RECORDING`, unmatched requests are sent out and responses recorded as new mock data.  In `PLAYBACK`, unmatched requests fall back to a default response defined in `default.yml`.
 
 ``` ruby
 Betamocks.configure do |config|
