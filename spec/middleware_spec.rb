@@ -27,10 +27,27 @@ RSpec.describe Betamocks::Middleware do
           )
         end
 
-        it 'creates a cache file' do
-          VCR.use_cassette('infinite_jest') do
-            conn.get '/doc/resource/009407494.json'
-            expect(File).to exist(File.join(Dir.pwd, cache_path))
+        context 'in RECORDING mode' do
+          before { Betamocks.configure { |config| config.mode = Betamocks::Configuration::RECORDING } }
+          it 'creates a cache file' do
+            VCR.use_cassette('infinite_jest') do
+              conn.get '/doc/resource/009407494.json'
+              expect(File).to exist(File.join(Dir.pwd, cache_path))
+            end
+          end
+        end
+
+        context 'in PLAYBACK mode' do
+          before { Betamocks.configure { |config| config.mode = Betamocks::Configuration::PLAYBACK } }
+
+          it 'responds with default'
+          it 'raises an exception when no default exists' do
+            VCR.use_cassette('infinite_jest') do
+              expect{conn.get '/doc/resource/111111111.json'}.to raise_error(IOError)
+            end
+          end
+          it 'does not create a cache file' do
+
           end
         end
       end

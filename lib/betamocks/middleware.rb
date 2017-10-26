@@ -16,6 +16,7 @@ module Betamocks
         @response_cache = Betamocks::ResponseCache.new(env: env, config: @endpoint_config)
         response = @response_cache.load_response
         return response if response
+        return @response_cache.load_response('default.yml') if Betamocks.configuration.mode == Betamocks::Configuration::PLAYBACK
       end
       super
     end

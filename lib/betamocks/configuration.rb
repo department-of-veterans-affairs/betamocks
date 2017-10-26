@@ -4,7 +4,10 @@ require 'yaml'
 
 module Betamocks
   class Configuration
-    attr_accessor :cache_dir, :enabled, :mocked_endpoints, :services_config
+    attr_accessor :cache_dir, :enabled, :mocked_endpoints, :services_config, :mode
+
+    RECORDING = "RECORDING".freeze
+    PLAYBACK  = "PLAYBACK".freeze
 
     def find_endpoint(env)
       service = service_by_host(env)
