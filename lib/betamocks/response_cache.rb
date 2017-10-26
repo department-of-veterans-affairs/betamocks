@@ -29,11 +29,6 @@ module Betamocks
       File.open(file_path, 'w') { |f| f.write(response.to_yaml) }
     end
 
-    # def load_default_response
-    #   raise_config_io unless File.directory?(Betamocks.configuration.cache_dir)
-    #   Faraday::Response.new(load_env) if File.exist?(file_path('default.yml'))
-    # end
-
     private
 
     def load_env(file_name = nil)
@@ -64,9 +59,5 @@ module Betamocks
       name = @config[:file_path].split('/').last
       @config.dig(:cache_multiple_responses) ? "#{Uid.new(@env).generate}.yml" : "#{name}.yml"
     end
-
-    # def raise_config_io
-    #   raise IOError, "Betamocks cache_dir: [#{Betamocks.configuration.cache_dir}], does not exist"
-    # end
   end
 end
