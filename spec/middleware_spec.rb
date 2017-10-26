@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'byebug'
 
 RSpec.describe Betamocks::Middleware do
   context 'with a valid config' do
