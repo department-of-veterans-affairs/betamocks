@@ -48,6 +48,41 @@ RSpec.describe Betamocks::Configuration do
   end
 
 
+  describe '#recording' do
+    before do
+      Betamocks.configure do |config|
+        config.enabled = true
+        config.cache_dir = File.join(Dir.pwd, 'spec', 'support', 'cache')
+        config.services_config = File.join(Dir.pwd, 'spec', 'support', 'betamocks.yml')
+      end
+    end
+    context 'when the setting is true' do
+      before { Betamocks.configure { |config| config.recording = true } }
+      it 'recording? should be true' do
+        expect(Betamocks.configuration.recording?).to be(true)
+      end
+    end
+    context 'when the setting is "true"' do
+      before { Betamocks.configure { |config| config.recording = 'true' } }
+      it 'recording? should be true' do
+        expect(Betamocks.configuration.recording?).to be(true)
+      end
+    end
+    context 'when the setting is false' do
+      before { Betamocks.configure { |config| config.recording = false } }
+      it 'recording? should be false' do
+        expect(Betamocks.configuration.recording?).to be(false)
+      end
+    end
+    context 'when the setting is "false"' do
+      before { Betamocks.configure { |config| config.recording = 'false' } }
+      it 'recording? should be false' do
+        expect(Betamocks.configuration.recording?).to be(false)
+      end
+    end
+  end
+
+
   describe '#enabled' do
     context 'when the setting is true' do
       before do
@@ -58,8 +93,8 @@ RSpec.describe Betamocks::Configuration do
         end
       end
 
-      it 'enabled should be true' do
-        expect(Betamocks.configuration.enabled).to be true
+      it 'enabled? should be true' do
+        expect(Betamocks.configuration.enabled?).to be true
       end
     end
 
@@ -72,8 +107,8 @@ RSpec.describe Betamocks::Configuration do
         end
       end
 
-      it 'enabled should be true' do
-        expect(Betamocks.configuration.enabled).to be true
+      it 'enabled? should be true' do
+        expect(Betamocks.configuration.enabled?).to be true
       end
     end
 
@@ -86,8 +121,8 @@ RSpec.describe Betamocks::Configuration do
         end
       end
 
-      it 'enabled should be false' do
-        expect(Betamocks.configuration.enabled).to be false
+      it 'enabled? should be false' do
+        expect(Betamocks.configuration.enabled?).to be false
       end
     end
 
@@ -100,8 +135,8 @@ RSpec.describe Betamocks::Configuration do
         end
       end
 
-      it 'enabled should be false' do
-        expect(Betamocks.configuration.enabled).to be false
+      it 'enabled? should be false' do
+        expect(Betamocks.configuration.enabled?).to be false
       end
     end
 
@@ -114,8 +149,8 @@ RSpec.describe Betamocks::Configuration do
         end
       end
 
-      it 'enabled should be false' do
-        expect(Betamocks.configuration.enabled).to be false
+      it 'enabled? should be false' do
+        expect(Betamocks.configuration.enabled?).to be false
       end
     end
 
@@ -127,8 +162,8 @@ RSpec.describe Betamocks::Configuration do
         end
       end
 
-      it 'enabled should be false' do
-        expect(Betamocks.configuration.enabled).to be false
+      it 'enabled? should be false' do
+        expect(Betamocks.configuration.enabled?).to be false
       end
     end
   end

@@ -9,7 +9,7 @@ require_relative 'response_cache'
 module Betamocks
   class Middleware < Faraday::Response::Middleware
     def call(env)
-      return super unless Betamocks.configuration.enabled
+      return super unless Betamocks.configuration.enabled?
       @endpoint_config = Betamocks.configuration.find_endpoint(env)
       if @endpoint_config
         raise_error(env, @endpoint_config) if @endpoint_config[:error]
@@ -22,7 +22,7 @@ module Betamocks
     end
 
     def on_complete(env)
-      return unless Betamocks.configuration.enabled && Betamocks.configuration.recording?
+      return unless Betamocks.configuration.enabled? && Betamocks.configuration.recording?
       @response_cache.save_response(env) if @endpoint_config
     end
 

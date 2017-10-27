@@ -4,7 +4,8 @@ require 'yaml'
 
 module Betamocks
   class Configuration
-    attr_accessor :cache_dir, :enabled, :mocked_endpoints, :services_config, :recording
+    attr_accessor :cache_dir, :mocked_endpoints, :services_config
+    attr_writer :recording, :enabled
 
     def find_endpoint(env)
       service = service_by_host(env)
@@ -24,7 +25,7 @@ module Betamocks
       @recording = value.to_s == 'true'
     end
 
-    def enabled
+    def enabled?
       return false if [ENV['RAILS_ENV'], ENV['RACK_ENV']].include? 'test'
       @enabled
     end
