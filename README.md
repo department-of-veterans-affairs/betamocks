@@ -1,6 +1,6 @@
 # Betamocks
 
-Betamocks is Faraday middleware that mocks APIs by recording and replaying requests. 
+Betamocks is Faraday middleware that mocks APIs by recording and replaying requests.
 It's especially useful for local development to mock out APIs that are behind a VPN (government),
 often go down (government), or when an API may not have a corresponding dev or staging environment (also government).
 
@@ -30,17 +30,19 @@ configure the Betamocks `enabled`, `cache_dir`, and `services_config` settings:
 - __enabled__: globally turn Betamocks on `true` or off `false`
 - __cache_dir__: the location Betamocks will save its cached response YAML files
 - __services_config__: a YAML file that describes which services and endpoints to mock.
+- __recording__: `true` or `false`, defaults to `false`.  When `true`, unmatched requests are sent out and responses recorded as new mock data.  Otherwise, unmatched requests fall back to a default response defined in `default.yml`.
 
 ``` ruby
 Betamocks.configure do |config|
   config.enabled = true
   config.cache_dir = File.join(Rails.root, 'config', 'betamocks', 'cache')
   config.services_config = File.join(Rails.root, 'config', 'betamocks', 'betamocks.yml')
+  config.recording = false
 end
 ```
 
 #### Services config
-The services config is YAML file containing a list (array) of services. 
+The services config is YAML file containing a list (array) of services.
 Each item in the services list contains:
 - __base_urls__: one or more domains for each environment of the API.
 - __endpoints__: a list of endpoints within the API to be mocked (all others will not be mocked).
@@ -49,7 +51,7 @@ Each endpoint will then describe its method and path.
   - __path__: the path or URL fragment for the endpoint e.g. `/v0/users`.
   Wildcards are allowed for varying parameters within a URL e.g. `/v0/users/*/forms`
   will record both `/v0/users/42/forms` and `/v0/users/101/forms`.
-  
+
 ```yaml
 :services:
 - :base_urls:
@@ -66,13 +68,13 @@ Each endpoint will then describe its method and path.
 ```
 
 #### Special considerations for request bodies with timestamps
-Betamocks automatically records multiple unique responses per endpoint. 
+Betamocks automatically records multiple unique responses per endpoint.
 A response is considered unique if any of the following differ:
 - params within the url; `/v0/users/42/forms` vs `/v0/users/101/forms`
 - request header values (other than 'Authorization' or 'Date' which are automatically stripped)
 - the request body
 
-If the body contains a timestamp that changes on every request, 
+If the body contains a timestamp that changes on every request,
 even though the rest of the body remains the same, it will cause Betamocks to record
 a new cache file rather than loading the existing file. To get around this you can
 add one or more regular expressions to strip out the timestamp.

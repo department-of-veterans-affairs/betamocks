@@ -4,17 +4,18 @@ require_relative 'uid'
 
 module Betamocks
   class ResponseCache
-    attr_writer :config, :env, :file_name
+    attr_writer :config, :env
 
     def initialize(env:, config: nil)
       @env = env
       @config = config
-      @file_name = generate_file_name
+      @generated_file_name = generate_file_name
     end
 
-    def load_response
+    def load_response(file_name = nil)
       raise IOError, "Betamocks cache_dir: [#{Betamocks.configuration.cache_dir}], does not exist" unless File.directory?(Betamocks.configuration.cache_dir)
-      Faraday::Response.new(load_env) if File.exist?(file_path)
+      raise IOError, "Betamocks file does not exist: [#{file_path(file_name)}]" if !file_name.nil? && !File.exist?(file_path(file_name))
+      Faraday::Response.new(load_env(file_name)) if File.exist?(file_path(file_name))
     end
 
     def save_response(env)
@@ -30,8 +31,8 @@ module Betamocks
 
     private
 
-    def load_env
-      cached_env = YAML.load_file(file_path)
+    def load_env(file_name = nil)
+      cached_env = YAML.load_file(file_path(file_name))
       @env.method = cached_env[:method]
       @env.body = cached_env[:body]
       @env.response_headers = cached_env[:headers]
@@ -50,8 +51,8 @@ module Betamocks
       )
     end
 
-    def file_path
-      File.join(dir_path, @file_name)
+    def file_path(file_name = nil)
+      File.join(dir_path, file_name || @generated_file_name)
     end
 
     def generate_file_name

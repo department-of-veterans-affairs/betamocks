@@ -1,0 +1,14 @@
+---
+:method: :get
+:body: '{"status":"NOT_FOUND","code":404}'
+:headers:
+  date: Mon, 24 Jul 2017 22:04:09 GMT
+  server: Apache
+  access-control-allow-origin: "*"
+  last-modified: Mon, 24 Jul 2017 22:04:09 GMT
+  x-served-from-cache: 'false'
+  etag: b0cd74f0b49986e42b8ed2844f8a565a
+  content-length: '2100'
+  content-type: application/json
+  connection: close
+:status: 404

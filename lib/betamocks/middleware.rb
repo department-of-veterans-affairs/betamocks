@@ -9,19 +9,20 @@ require_relative 'response_cache'
 module Betamocks
   class Middleware < Faraday::Response::Middleware
     def call(env)
-      return super unless Betamocks.configuration.enabled
+      return super unless Betamocks.configuration.enabled?
       @endpoint_config = Betamocks.configuration.find_endpoint(env)
       if @endpoint_config
         raise_error(env, @endpoint_config) if @endpoint_config[:error]
         @response_cache = Betamocks::ResponseCache.new(env: env, config: @endpoint_config)
         response = @response_cache.load_response
         return response if response
+        return @response_cache.load_response('default.yml') unless Betamocks.configuration.recording?
       end
       super
     end
 
     def on_complete(env)
-      return unless Betamocks.configuration.enabled
+      return unless Betamocks.configuration.enabled? && Betamocks.configuration.recording?
       @response_cache.save_response(env) if @endpoint_config
     end
 
