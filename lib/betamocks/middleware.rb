@@ -16,13 +16,13 @@ module Betamocks
         @response_cache = Betamocks::ResponseCache.new(env: env, config: @endpoint_config)
         response = @response_cache.load_response
         return response if response
-        return @response_cache.load_response('default.yml') if Betamocks.configuration.mode == Betamocks::Configuration::PLAYBACK
+        return @response_cache.load_response('default.yml') unless Betamocks.configuration.recording?
       end
       super
     end
 
     def on_complete(env)
-      return unless Betamocks.configuration.enabled && Betamocks.configuration.mode == Betamocks::Configuration::RECORDING
+      return unless Betamocks.configuration.enabled && Betamocks.configuration.recording?
       @response_cache.save_response(env) if @endpoint_config
     end
 

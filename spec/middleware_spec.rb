@@ -7,7 +7,7 @@ RSpec.describe Betamocks::Middleware do
     before(:each) do
       Betamocks.configure do |config|
         config.enabled = true
-        config.mode = Betamocks::Configuration::RECORDING
+        config.recording = true
         config.cache_dir = File.join(Dir.pwd, 'spec', 'support', 'cache')
         config.services_config = File.join(Dir.pwd, 'spec', 'support', 'betamocks.yml')
       end
@@ -28,8 +28,8 @@ RSpec.describe Betamocks::Middleware do
           )
         end
 
-        context 'in RECORDING mode' do
-          before { Betamocks.configure { |config| config.mode = Betamocks::Configuration::RECORDING } }
+        context 'in recording mode' do
+          before { Betamocks.configure { |config| config.recording = true } }
           it 'creates a cache file' do
             VCR.use_cassette('infinite_jest') do
               conn.get '/doc/resource/009407494.json'
@@ -38,9 +38,9 @@ RSpec.describe Betamocks::Middleware do
           end
         end
 
-        context 'in PLAYBACK mode' do
+        context 'not in recording mode' do
           before do
-            Betamocks.configure { |config| config.mode = Betamocks::Configuration::PLAYBACK }
+            Betamocks.configure { |config| config.recording = false }
           end
 
           it 'raises an exception when no default exists' do
@@ -142,8 +142,8 @@ RSpec.describe Betamocks::Middleware do
           let(:cache_path) { File.join(cache_dir, 'W1AW.yml') }
           let(:default_file) { File.join(Dir.pwd, 'spec', 'support', 'responses', 'default.yml') }
 
-          context 'in RECORDING mode' do
-            before { Betamocks.configure { |config| config.mode = Betamocks::Configuration::RECORDING } }
+          context 'in recording mode' do
+            before { Betamocks.configure { |config| config.recording = true } }
 
             it 'saves the expected file name' do
               VCR.use_cassette('callook_url') do
@@ -153,9 +153,9 @@ RSpec.describe Betamocks::Middleware do
             end
           end
 
-          context 'in PLAYBACK mode' do
+          context 'not in recording mode with a default defined' do
             before do
-              Betamocks.configure { |config| config.mode = Betamocks::Configuration::PLAYBACK }
+              Betamocks.configure { |config| config.recording = false }
               FileUtils.mkdir_p(cache_dir)
               FileUtils.cp(default_file, cache_dir)
             end
