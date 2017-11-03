@@ -12,14 +12,21 @@
       :body: 'foo'
 
 # book service
-- :base_uri: bnb.data.bl.uk
+- :base_uri: bnb.data.bl.uk:80
   :endpoints:
   - :method: :get
     :path: "/doc/resource/*"
     :file_path: "bnb/book"
 
+# book service alt port
+- :base_uri: bnb.data.bl.uk:8080
+  :endpoints:
+  - :method: :get
+    :path: "/doc/resource/*"
+    :file_path: "bnb/book8080"
+
 # requestb.in
-- :base_uri: requestb.in
+- :base_uri: requestb.in:443
   :endpoints:
   - :method: :post
     :path: "/tithviti"
@@ -41,7 +48,7 @@
       :uid_locator: 'uuid'
 
 # callook.info
-- :base_uri: callook.info
+- :base_uri: callook.info:443
   :endpoints:
   - :method: :get
     :path: "/W1AW/json"
