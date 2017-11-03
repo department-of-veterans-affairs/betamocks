@@ -8,7 +8,7 @@ module Betamocks
     attr_writer :recording, :enabled
 
     def find_endpoint(env)
-      service = service_by_host(env)
+      service = service_by_host_port(env)
       return nil unless service
       service[:endpoints].select { |e| matches_path(e, env.method, env.url.path) }.first
     end
@@ -46,8 +46,8 @@ module Betamocks
       @base_urls ||= config[:services].map { |s| s[:base_urls] }.flatten
     end
 
-    def service_by_host(env)
-      config[:services].select { |s| s[:base_uri] == env.url.host }.first
+    def service_by_host_port(env)
+      config[:services].select { |s| s[:base_uri] == "#{env.url.host}:#{env.url.port}" }.first
     end
 
     def matches_path(endpoint, method, path)
