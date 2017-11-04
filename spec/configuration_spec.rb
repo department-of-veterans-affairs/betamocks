@@ -36,6 +36,16 @@ RSpec.describe Betamocks::Configuration do
         end
       end
 
+      context 'with overlapping hosts' do
+        let(:env) { double('Faraday::Env') }
+        let(:url) { URI('http://bnb.data.bl.uk:8080/doc/resource/009407494.json') }
+
+        it 'returns the correct endpoint based on port' do
+          endpoint = Betamocks.configuration.find_endpoint(env)
+          expect(endpoint).to eq(method: :get, path: '/doc/resource/*', file_path: 'bnb/book8080')
+        end
+      end
+
       context 'with an unmocked endpoint' do
         let(:env) { double('Faraday::Env') }
         let(:url) { URI('http://foo.com/bar.json') }

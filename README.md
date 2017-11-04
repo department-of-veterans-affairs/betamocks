@@ -44,7 +44,7 @@ end
 #### Services config
 The services config is YAML file containing a list (array) of services.
 Each item in the services list contains:
-- __base_urls__: one or more domains for each environment of the API.
+- __base_uri__: one or more host:port combinations for each environment of the API.
 - __endpoints__: a list of endpoints within the API to be mocked (all others will not be mocked).
 Each endpoint will then describe its method and path.
   - __method__: HTTP method as a symbol :get, :post, :put, etc.
