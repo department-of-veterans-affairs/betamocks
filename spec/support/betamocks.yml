@@ -17,6 +17,9 @@
   - :method: :get
     :path: "/doc/resource/*"
     :file_path: "bnb/book"
+  - :method: :get
+    :path: "/doc/resource/blah/*"
+    :file_path: "bnb/blah_books"
 
 # book service alt port
 - :base_uri: bnb.data.bl.uk:8080
@@ -56,3 +59,13 @@
     :cache_multiple_responses:
       :uid_location: url
       :uid_locator: '\/(.+)\/json'
+
+# petpics.com
+- :base_uri: petpics.com:80
+  :endpoints:
+  - :method: :get
+    :path: "/a/cat"
+    :file_path: "cats"
+  - :method: :get
+    :path: "/a/cat/and/dog"
+    :file_path: "cats/with/dogs"
