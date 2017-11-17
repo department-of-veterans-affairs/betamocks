@@ -46,6 +46,33 @@ RSpec.describe Betamocks::Configuration do
         end
       end
 
+      context 'with overlapping endpoints that contain *' do
+        let(:env) { double('Faraday::Env') }
+        let(:url) { URI('http://bnb.data.bl.uk/doc/resource/blah/009407494.json') }
+
+        it 'returns the correct endpoint' do
+          endpoint = Betamocks.configuration.find_endpoint(env)
+          expect(endpoint).to eq(method: :get, path: '/doc/resource/blah/*', file_path: 'bnb/blah_books')
+        end
+      end
+
+      context 'with overlapping endpoints' do
+        let(:env) { double('Faraday::Env') }
+        let(:url) { URI('http://petpics.com/a/cat') }
+        let(:extended_url) { URI(url.to_s + '/and/dog') }
+
+        it 'returns the non-extended url' do
+          endpoint = Betamocks.configuration.find_endpoint(env)
+          expect(endpoint).to eq(method: :get, path: '/a/cat', file_path: 'cats')
+        end
+
+        it 'returns the non-extended url' do
+          allow(env).to receive(:url).and_return(extended_url)
+          endpoint = Betamocks.configuration.find_endpoint(env)
+          expect(endpoint).to eq(method: :get, path: '/a/cat/and/dog', file_path: 'cats/with/dogs')
+        end
+      end
+
       context 'with an unmocked endpoint' do
         let(:env) { double('Faraday::Env') }
         let(:url) { URI('http://foo.com/bar.json') }
