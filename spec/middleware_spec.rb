@@ -160,6 +160,13 @@ RSpec.describe Betamocks::Middleware do
               FileUtils.cp(default_file, cache_dir)
             end
 
+            it 'logs a warning' do
+              expect(Betamocks.logger).to receive(:warn).with(/Mock response not found/)
+              VCR.use_cassette('callook_url') do
+                conn.get '/W1AW/json'
+              end
+            end
+
             it 'responds with default' do
               VCR.use_cassette('callook_url') do
                 response = conn.get '/W1AW/json'
