@@ -37,6 +37,12 @@
     :cache_multiple_responses:
       :uid_location: body
       :uid_locator: 'root="2.16.840.1.113883.4.1" extension="(\d{9})"'
+  - :method: :post
+    :path: "/tithvitj"
+    :file_path: "multi/body/captures"
+    :cache_multiple_responses:
+      :uid_location: body
+      :uid_locator: '<v11:eMISservice(EpisodeRequest)>\n\s+<v12:edipiORicn>\n\s+<v13:edipiORicnValue>(\d+)'
   - :method: :get
     :path: "/1gv9b4e1"
     :file_path: "multi/header"

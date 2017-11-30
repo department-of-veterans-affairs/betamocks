@@ -22,7 +22,7 @@ module Betamocks
       locator = uid_config[:uid_locator]
       case location
       when :body
-        @env.body[/#{locator}/, 1]
+        @env.body.match(/#{locator}/).to_a[1..-1]&.join('_')
       when :header
         @env.request_headers[locator]
       when :query

@@ -1,0 +1,52 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://requestb.in/tithvitj
+    body:
+      encoding: UTF-8
+      string: |-
+        <env:Envelope xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+                   <env:Body>
+                     <id extension="WSDOC1610281012015841158653421" root="2.16.840.1.113883.4.349"/>
+                     <creationTime value="20170823174724"/>
+                     <versionCode code="3.0"/>
+                   </env:Body>
+                 </env:Envelope>
+    headers:
+      User-Agent:
+      - Faraday v0.12.2
+  response:
+    status:
+      code: 200
+      message: 
+    headers:
+      date:
+      - Wed, 23 Aug 2017 17:46:57 GMT
+      content-type:
+      - text/html; charset=utf-8
+      transfer-encoding:
+      - chunked
+      connection:
+      - close
+      set-cookie:
+      - __cfduid=d32f6c31f7ac2a6b5ceebf0f5dddbce361503510417; expires=Thu, 23-Aug-18
+        17:46:57 GMT; path=/; domain=.requestb.in; HttpOnly
+      sponsored-by:
+      - https://www.runscope.com
+      via:
+      - 1.1 vegur
+      strict-transport-security:
+      - max-age=15552000
+      x-content-type-options:
+      - nosniff
+      server:
+      - cloudflare-nginx
+      cf-ray:
+      - 392fe4eb390577e4-LAX
+    body:
+      encoding: ASCII-8BIT
+      string: ok
+    http_version: 
+  recorded_at: Wed, 23 Aug 2017 17:47:25 GMT
+recorded_with: VCR 3.0.3
