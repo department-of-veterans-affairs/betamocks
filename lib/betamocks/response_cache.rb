@@ -18,6 +18,7 @@ module Betamocks
         Faraday::Response.new(load_env(@generated_file_name))
       else
         Betamocks.logger.warn "Mock response not found: [#{file_path(@generated_file_name)}]"
+        nil
       end
     end
 
