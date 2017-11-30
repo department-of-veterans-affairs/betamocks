@@ -100,6 +100,38 @@ RSpec.describe Betamocks::Middleware do
           end
         end
 
+        context 'with a request that includes multiple identifiers in the request body' do
+          let(:xml) do
+            '<soap:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:v1="http://viers.va.gov/cdi/CDI/commonService/v1" xmlns:v12="http://viers.va.gov/cdi/eMIS/RequestResponse/v1" xmlns:v13="http://viers.va.gov/cdi/eMIS/commonService/v1" xmlns:v11="http://viers.va.gov/cdi/eMIS/RequestResponse/MilitaryInfo/v1">
+          <soap:Header>
+            <v1:inputHeaderInfo>
+              <v1:userId>vets.gov</v1:userId>
+              <v1:sourceSystemName>vets.gov</v1:sourceSystemName>
+              <v1:transactionId>245e2072-c7a6-48f0-a429-549355af5cf9</v1:transactionId>
+            </v1:inputHeaderInfo>
+          </soap:Header>
+          <soap:Body>
+            <v11:eMISserviceEpisodeRequest>
+              <v12:edipiORicn>
+                <v13:edipiORicnValue>1607472595</v13:edipiORicnValue>
+                <v13:inputType>EDIPI</v13:inputType>
+              </v12:edipiORicn>
+            </v11:eMISserviceEpisodeRequest>
+          </soap:Body>
+        </soap:Envelope>'
+          end
+          let(:cache_path) do
+            File.join('spec', 'support', 'cache', 'multi', 'body', 'captures', 'EpisodeRequest_1607472595.yml')
+          end
+
+          it 'has the expected file name' do
+            VCR.use_cassette('request_bin_post_multiple') do
+              conn.post '/tithvitj', xml
+              expect(File).to exist(File.join(Dir.pwd, cache_path))
+            end
+          end
+        end
+
         context 'with a request that includes the identifier in the request headers' do
           let(:cache_path) do
             File.join('spec', 'support', 'cache', 'multi', 'header', '1607472595.yml')
