@@ -91,10 +91,6 @@ RSpec.describe Betamocks::Configuration do
           endpoint = Betamocks.configuration.find_endpoint(env)
           expect(endpoint).to include(method: :get, path: '/get_animals', file_path: '/pics/lions')
         end
-
-        it 'returns the proper endpoint for request header' do
-
-        end
       end
     end
   end
