@@ -81,6 +81,21 @@ RSpec.describe Betamocks::Configuration do
           expect(Betamocks.configuration.find_endpoint(env)).to be_falsey
         end
       end
+
+      context 'with one uri that serves multiple resources' do
+        let(:env) { double('Faraday::Env') }
+        let(:url) { URI('http://animal.pics/get_animals') }
+
+        it 'returns the proper endpoint for request body' do
+          allow(env).to receive(:body).and_return('<AnimalType>Lion</AnimalType>')
+          endpoint = Betamocks.configuration.find_endpoint(env)
+          expect(endpoint).to include(method: :get, path: '/get_animals', file_path: '/pics/lions')
+        end
+
+        it 'returns the proper endpoint for request header' do
+
+        end
+      end
     end
   end
 

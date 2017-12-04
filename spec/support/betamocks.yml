@@ -69,3 +69,19 @@
   - :method: :get
     :path: "/a/cat/and/dog"
     :file_path: "cats/with/dogs"
+
+# one endpoint for two resources
+- :base_uri: animal.pics:80
+  :endpoints:
+  - :method: :get
+    :path: "/get_animals"
+    :file_path: "/pics/zebras"
+    :cache_multiple_responses:
+      :uid_location: body
+      :uid_locator: '<AnimalType>Zebra'
+  - :method: :get
+    :path: "/get_animals"
+    :file_path: "/pics/lions"
+    :cache_multiple_responses:
+      :uid_location: body
+      :uid_locator: '<AnimalType>Lion'
