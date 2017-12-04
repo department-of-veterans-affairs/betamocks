@@ -76,11 +76,11 @@ module Betamocks
       when :body
         /#{locator}/ =~ env.body
       when :header
-        # TODO
+        return false # TODO
       when :query
-        # TODO
+        return false # TODO
       when :url
-        # TODO
+        return false # TODO
       else
         message = "#{location} is not a valid location for a uid try 'body', 'headers', 'query', or 'url' instead"
         raise ArgumentError, message
