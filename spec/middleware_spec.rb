@@ -18,7 +18,6 @@ RSpec.describe Betamocks::Middleware do
       let(:cache_path) { File.join('spec', 'support', 'cache', 'pics', 'zebras') }
       let(:connection) do
         Faraday.new(url: 'http://animal.pics/get_animals') do |faraday|
-          # faraday.body '<AnimalType>Zebra</AnimalType><Id>11112222</Id>'
           faraday.response :betamocks
           faraday.adapter Faraday.default_adapter
         end
