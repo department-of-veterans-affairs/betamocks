@@ -10,7 +10,18 @@ module Betamocks
     def find_endpoint(env)
       service = service_by_host_port(env)
       return nil unless service
-      service[:endpoints].select { |e| matches_path(e, env.method, env.url.path) }.first
+      # TODO raise if service.size > 1 ?
+      
+      endpoints = service[:endpoints].select { |e| matches_path(e, env.method, env.url.path) }
+      return nil unless endpoints
+      return endpoints.first if endpoints.size == 1
+
+      # one path + http verb may be used for multiple resources
+      endpoints = endpoints.select { |e| matches_request_params(e, env) }
+      return nil unless endpoints
+      return endpoints.first if endpoints.size == 1
+
+      raise ArgumentError, "Unable to uniquely identify request! Please check your services config.  Matched endpoints: [#{endpoints.to_s}]"
     end
 
     def config
@@ -52,6 +63,28 @@ module Betamocks
 
     def matches_path(endpoint, method, path)
       /\A#{endpoint[:path].gsub('/', '\/').gsub('*', '[^\/]*')}\z/ =~ path && endpoint[:method] == method
+    end
+
+    def matches_request_params(endpoint, env)
+      endpoint_config = endpoint.dig(:cache_multiple_responses)
+      return false if endpoint_config.nil?
+
+      location = endpoint_config[:uid_location].to_sym
+      locator = endpoint_config[:uid_locator]
+
+      case location
+      when :body
+        /#{locator}/ =~ env.body
+      when :header
+        return false # TODO
+      when :query
+        return false # TODO
+      when :url
+        return false # TODO
+      else
+        message = "#{location} is not a valid location for a uid try 'body', 'headers', 'query', or 'url' instead"
+        raise ArgumentError, message
+      end
     end
   end
 end

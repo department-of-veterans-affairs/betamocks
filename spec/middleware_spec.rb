@@ -13,6 +13,24 @@ RSpec.describe Betamocks::Middleware do
       end
     end
 
+    context 'with one uri endpoint that serves multiple resources' do
+      before { Betamocks.configure { |config| config.recording = true } }
+      let(:cache_path) { File.join('spec', 'support', 'cache', 'pics', 'zebras') }
+      let(:connection) do
+        Faraday.new(url: 'http://animal.pics/get_animals') do |faraday|
+          faraday.response :betamocks
+          faraday.adapter Faraday.default_adapter
+        end
+      end
+
+      it 'records the request' do
+        VCR.use_cassette('animal_pics') do
+          connection.post(nil, '<AnimalType>Zebra</AnimalType><Id>11112222</Id>')
+          expect(File).to exist(File.join(Dir.pwd, cache_path, '11112222.yml'))
+        end
+      end
+    end
+
     describe 'request caching' do
       let(:conn) do
         Faraday.new(url: 'http://bnb.data.bl.uk') do |faraday|
