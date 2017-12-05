@@ -73,15 +73,15 @@
 # one endpoint for two resources
 - :base_uri: animal.pics:80
   :endpoints:
-  - :method: :get
+  - :method: :post
     :path: "/get_animals"
     :file_path: "/pics/zebras"
     :cache_multiple_responses:
       :uid_location: body
-      :uid_locator: '<AnimalType>Zebra'
-  - :method: :get
+      :uid_locator: '<AnimalType>Zebra<\/AnimalType><Id>(\d{8})'
+  - :method: :post
     :path: "/get_animals"
     :file_path: "/pics/lions"
     :cache_multiple_responses:
       :uid_location: body
-      :uid_locator: '<AnimalType>Lion'
+      :uid_locator: '<AnimalType>Lion<\/AnimalType><Id>(\d{8})'

@@ -87,9 +87,11 @@ RSpec.describe Betamocks::Configuration do
         let(:url) { URI('http://animal.pics/get_animals') }
 
         it 'returns the proper endpoint for request body' do
-          allow(env).to receive(:body).and_return('<AnimalType>Lion</AnimalType>')
+          allow(env).to receive(:method).and_return(:post)
+          allow(env).to receive(:body)
+            .and_return('<AnimalType>Lion</AnimalType><Id>12345678</Id>')
           endpoint = Betamocks.configuration.find_endpoint(env)
-          expect(endpoint).to include(method: :get, path: '/get_animals', file_path: '/pics/lions')
+          expect(endpoint).to include(method: :post, path: '/get_animals', file_path: '/pics/lions')
         end
       end
     end

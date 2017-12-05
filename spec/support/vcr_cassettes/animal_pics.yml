@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://animal.pics/get_animals
+    body:
+      encoding: UTF-8
+      string: '<AnimalType>Zebra</AnimalType><Id>11112222</Id>'
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Date:
+      - Fri, 28 Oct 2016 15:32:13 GMT
+      Content-Length:
+      - '3123'
+      Content-Type:
+      - text/xml;charset=UTF-8
+      Soapaction:
+      - PRPA_IN201305UV02
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 28 Oct 2016 15:12:01 GMT
+      Content-Length:
+      - '4018'
+      Content-Type:
+      - text/xml
+      Set-Cookie:
+      - JSESSIONID=w7RgYTqBYV2hMcQyLQVMZPl0X5yMFP2NXx8sDDtVdyQpLnTdxLSk!1604350384;
+        path=/; HttpOnly
+      X-Powered-By:
+      - Servlet/2.5 JSP/2.1
+    body:
+      encoding: UTF-8
+      string: <pic>zebra_pic.jpg</pic>
+    http_version: 
+  recorded_at: Fri, 28 Oct 2016 15:32:14 GMT
+recorded_with: VCR 3.0.3
