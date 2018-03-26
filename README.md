@@ -44,27 +44,23 @@ end
 #### Services config
 The services config is YAML file containing a list (array) of services.
 Each item in the services list contains:
-- __base_uri__: one or more host:port combinations for each environment of the API.
+- __base_uri__: one or more host:port combinations for each environment of the API. NOTE: Including the port is important. The host+port have to match exactly and the system will _not_ infer anything. So for example, betamocks will not assume that an `https` endpoint will use port 443. You must specify it. 
 - __endpoints__: a list of endpoints within the API to be mocked (all others will not be mocked).
 Each endpoint will then describe its method and path.
   - __method__: HTTP method as a symbol :get, :post, :put, etc.
   - __path__: the path or URL fragment for the endpoint e.g. `/v0/users`.
   Wildcards are allowed for varying parameters within a URL e.g. `/v0/users/*/forms`
   will record both `/v0/users/42/forms` and `/v0/users/101/forms`.
+  - __file_path__: a path from the root of the betamocks project to the directory where response files are located. 
 
 ```yaml
 :services:
-- :base_urls:
-  - va.service.that.timesout
-  - int.va.service.that.timesout
+- :base_uri:
+  - va.service.host.here:777
   :endpoints:
   - :method: :get
     :path: "/v0/users/*/forms"
-- :base_urls:
-  - bnb.data.bl.uk
-  :endpoints:
-  - :method: :get
-    :path: "/doc/resource/*"
+    :file_path: "path/to/dir/in/betamocks"
 ```
 
 #### Special considerations for request bodies with timestamps
@@ -105,6 +101,8 @@ in this case 14 digits `\d{14}` that follow `creationTime value=` or `creationTi
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
+In troubleshooting situtations, it may be convenient to cloning the repository locally and reference that location from the vets-api Gemfile. This makes it easy to use `byebug` etc to debug the repo.
 
 ## Contributing
 
