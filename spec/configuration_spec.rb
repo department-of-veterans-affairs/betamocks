@@ -93,6 +93,30 @@ RSpec.describe Betamocks::Configuration do
           endpoint = Betamocks.configuration.find_endpoint(env)
           expect(endpoint).to include(method: :post, path: '/get_animals', file_path: '/pics/lions')
         end
+
+        context 'and optional_code_locator is defined by service' do
+          let(:url) { URI('http://animal.pics/get_animals') }
+          let(:optional_code_locator_value) { '<Quality>"HI-DEF"</Quality>' }
+
+          before do
+            allow(env).to receive(:method).and_return(:post)
+            allow(env).to receive(:body)
+            .and_return("#{optional_code_locator_value}<AnimalType>Gorilla</AnimalType><Id>12345678</Id>")
+          end
+
+          it 'returns the proper endpoint for request body' do
+            endpoint = Betamocks.configuration.find_endpoint(env)
+            expect(endpoint).to include(method: :post, path: '/get_animals', file_path: '/pics/gorillas')
+          end
+
+          context 'and optional_code_locator does not match mocked value' do
+           let(:optional_code_locator_value) { '<Quality>ULTRA-CRISP-DEF</Quality>' }
+
+            it 'responds with an argument error' do
+              expect { Betamocks.configuration.find_endpoint(env) }.to raise_exception(ArgumentError)
+            end
+          end
+        end
       end
     end
   end

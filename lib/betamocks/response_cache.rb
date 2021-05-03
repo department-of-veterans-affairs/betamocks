@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'uid'
+require_relative 'optional_locator'
 
 module Betamocks
   class ResponseCache
@@ -14,8 +15,10 @@ module Betamocks
 
     def load_response
       raise IOError, "Betamocks cache_dir: [#{Betamocks.configuration.cache_dir}], does not exist" unless File.directory?(Betamocks.configuration.cache_dir)
-      if File.exist?(file_path(@generated_file_name))
-        Faraday::Response.new(load_env(@generated_file_name))
+      if File.exist?(optional_locator_file_path(@generated_file_name))
+        Faraday::Response.new(load_env(optional_locator_file_path(@generated_file_name)))
+      elsif File.exist?(file_path(@generated_file_name))
+        Faraday::Response.new(load_env(file_path(@generated_file_name)))
       else
         Betamocks.logger.warn "Mock response not found: [#{file_path(@generated_file_name)}]"
         nil
@@ -24,7 +27,7 @@ module Betamocks
 
     def default_response
       raise IOError, "Betamocks default response requested but none exist. Please create one at: [#{file_path('default.yml')}]." unless File.exist?(file_path('default.yml'))
-      Faraday::Response.new(load_env('default.yml'))
+      Faraday::Response.new(load_env(file_path('default.yml')))
     end
 
     def save_response(env)
@@ -40,8 +43,8 @@ module Betamocks
 
     private
 
-    def load_env(file_name)
-      cached_env = YAML.load_file(file_path(file_name))
+    def load_env(file)
+      cached_env = YAML.load_file(file)
       @env.method = cached_env[:method]
       @env.body = cached_env[:body]
       @env.response_headers = cached_env[:headers]
@@ -62,6 +65,10 @@ module Betamocks
 
     def file_path(file_name = nil)
       File.join(dir_path, file_name || @generated_file_name)
+    end
+
+    def optional_locator_file_path(file_name = nil)
+      File.join(dir_path, OptionalLocator.new(@env).generate, file_name || @generated_file_name)
     end
 
     def generate_file_name
