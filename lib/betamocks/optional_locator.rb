@@ -20,14 +20,10 @@ module Betamocks
     private
 
     def generate_optional_locator_dir(locator_config)
-      return unless locator_config
-      # Optional Locator must exist in the same location as the UID
-      location = locator_config[:uid_location].to_sym
-      locator = locator_config[:optional_code_locator]
-      # Currently only works if optional locator is found in the body
-      return '' unless location == :body && locator
+      # Currently only works if optional locator is found in the body (must be same as the uid location)
+      return unless locator_config && locator_config[:uid_location].to_sym == :body
 
-      @env.body[/#{locator}/, 1]
+      @env.body[/#{locator_config[:optional_code_locator]}/, 1]
     end
   end
 end
