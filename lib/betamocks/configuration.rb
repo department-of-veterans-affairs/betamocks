@@ -72,9 +72,11 @@ module Betamocks
       location = endpoint_config[:uid_location].to_sym
       locator = endpoint_config[:uid_locator]
 
+      optional_locator = endpoint_config[:optional_code_locator]
+
       case location
       when :body
-        /#{locator}/ =~ env.body
+        /#{locator}/ =~ env.body && /#{optional_locator}/ =~ env.body
       when :header
         return false # TODO
       when :query

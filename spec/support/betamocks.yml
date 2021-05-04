@@ -85,3 +85,21 @@
     :cache_multiple_responses:
       :uid_location: body
       :uid_locator: '<AnimalType>Lion<\/AnimalType><Id>(\d{8})'
+  - :method: :post
+    :path: "/get_animals"
+    :file_path: "/pics/gorillas"
+    :cache_multiple_responses:
+      :uid_location: body
+      :uid_locator: '<AnimalType>Gorilla<\/AnimalType><Id>(\d{8})'
+      :optional_code_locator: '<Quality>"(HI-DEF|LO-DEF)"</Quality>'
+
+# garbage.day
+- :base_uri: garbage.day:80
+  :endpoints:
+  - :method: :get
+    :path: "/get_garbage"
+    :file_path: "pics/garbage"
+    :cache_multiple_responses:
+      :uid_location: some-location
+      :uid_locator: some-locator
+      :optional_code_locator: '<Quality>"(HI-DEF|LO-DEF)"</Quality>'
