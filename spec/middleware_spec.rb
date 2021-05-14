@@ -204,8 +204,8 @@ RSpec.describe Betamocks::Middleware do
           end
         end
 
-        it 'raises a Faraday::ClientError' do
-          expect { conn.get '/v0/users/42/forms' }.to raise_error Faraday::ClientError
+        it 'raises a Faraday::ConnectionFailed' do
+          expect { conn.get '/v0/users/42/forms' }.to raise_error Faraday::ConnectionFailed
         end
       end
 
