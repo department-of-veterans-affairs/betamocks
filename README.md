@@ -51,6 +51,7 @@ Each endpoint will then describe its method and path.
   - __path__: the path or URL fragment for the endpoint e.g. `/v0/users`.
   Wildcards are allowed for varying parameters within a URL e.g. `/v0/users/*/forms`
   will record both `/v0/users/42/forms` and `/v0/users/101/forms`.
+  - __response_delay__: (optional) delay in seconds in sending the response (useful to simulate real world delays)
 
 ```yaml
 :services:
@@ -60,6 +61,7 @@ Each endpoint will then describe its method and path.
   :endpoints:
   - :method: :get
     :path: "/v0/users/*/forms"
+    :response_delay: 2
 - :base_urls:
   - bnb.data.bl.uk
   :endpoints:

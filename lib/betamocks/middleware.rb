@@ -12,6 +12,10 @@ module Betamocks
       return super unless Betamocks.configuration.enabled?
       @endpoint_config = Betamocks.configuration.find_endpoint(env)
       if @endpoint_config
+        if @endpoint_config[:response_delay] && !Betamocks.configuration.recording?
+          Betamocks.logger.info "sleeping for #{@endpoint_config[:response_delay]} seconds to simulate response delay"
+          sleep @endpoint_config[:response_delay]
+        end
         raise_error(env, @endpoint_config) if @endpoint_config[:error]
         @response_cache = Betamocks::ResponseCache.new(env: env, config: @endpoint_config)
         response = @response_cache.load_response

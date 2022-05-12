@@ -209,6 +209,44 @@ RSpec.describe Betamocks::Middleware do
         end
       end
 
+      context 'when the endpoint is configured with response delay' do
+        let(:conn) do
+          Faraday.new(url: 'http://service.with.response.delay') do |faraday|
+            faraday.response :betamocks
+            faraday.adapter Faraday.default_adapter
+          end
+        end
+        let(:default_file) { File.join(Dir.pwd, 'spec', 'support', 'responses', 'default.yml') }
+
+        context 'when recording is enabled' do
+          before { Betamocks.configure { |config| config.recording = true } }
+
+          it 'does not call sleep or log the message' do
+            VCR.use_cassette('token') do
+              expect_any_instance_of(Betamocks::Middleware).to_not receive(:sleep)
+              expect(Betamocks.logger).to_not receive(:info).with(/sleeping for/)
+              conn.get '/token'
+            end
+          end
+        end
+
+        context 'when recording is disabled' do
+          before do
+            Betamocks.configure { |config| config.recording = false }
+            cache_dir = File.join(Dir.pwd, 'spec', 'support', 'cache')
+            FileUtils.cp(default_file, cache_dir)
+          end
+
+          it 'calls sleep and logs message' do
+            VCR.use_cassette('token') do
+              expect_any_instance_of(Betamocks::Middleware).to receive(:sleep).with(2)
+              expect(Betamocks.logger).to receive(:info).with(/sleeping for/)
+              conn.get '/token'
+            end
+          end
+        end
+      end
+
       context 'when betamocks is disabled' do
         before do
           Betamocks.configure do |config|
