@@ -11,6 +11,14 @@
       :status: 400
       :body: 'foo'
 
+# service with response delay
+- :base_uri: service.with.response.delay:80
+  :endpoints:
+    - :method: :get
+      :path: "/token"
+      :file_path: "default"
+      :response_delay: 2
+
 # book service
 - :base_uri: bnb.data.bl.uk:80
   :endpoints:
