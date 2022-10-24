@@ -118,6 +118,16 @@ RSpec.describe Betamocks::Configuration do
           end
         end
       end
+
+      context 'with overlapping endpoints' do
+        let(:env) { double('Faraday::Env') }
+        let(:url) { URI("http://animal.pics/get_animals(class='reptilia',pagination=true)" }
+
+        it 'returns the non-extended url' do
+          endpoint = Betamocks.configuration.find_endpoint(env)
+          expect(endpoint).to eq(method: :get, path: "/get_animals(class='reptilia',pagination=true)", file_path: 'pics/reptiles')
+        end
+      end 
     end
   end
 

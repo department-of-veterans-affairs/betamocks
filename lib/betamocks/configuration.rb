@@ -62,7 +62,7 @@ module Betamocks
     end
 
     def matches_path(endpoint, method, path)
-      /\A#{endpoint[:path].gsub('/', '\/').gsub('*', '[^\/]*')}\z/ =~ path && endpoint[:method] == method
+      /\A#{endpoint[:path].gsub('/', '\/').gsub('*', '[^\/]*').tr('()', '')}\z/ =~ path && endpoint[:method] == method
     end
 
     def matches_request_params(endpoint, env)
