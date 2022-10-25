@@ -119,7 +119,7 @@ RSpec.describe Betamocks::Configuration do
         end
       end
 
-      context 'with overlapping endpoints' do
+      context 'with regex special characters' do
         let(:env) { double('Faraday::Env') }
         let(:url) { URI("http://animal.pics/get_animals(class='reptilia',pagination=true)" }
 
