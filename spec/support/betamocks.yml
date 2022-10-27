@@ -100,6 +100,9 @@
       :uid_location: body
       :uid_locator: '<AnimalType>Gorilla<\/AnimalType><Id>(\d{8})'
       :optional_code_locator: '<Quality>"(HI-DEF|LO-DEF)"</Quality>'
+  - :method: :get
+    :path: "/get_animals(class='reptilia',pagination=true)"
+    :file_path: "/pics/reptiles"
 
 # garbage.day
 - :base_uri: garbage.day:80
