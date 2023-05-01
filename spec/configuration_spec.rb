@@ -71,6 +71,40 @@ RSpec.describe Betamocks::Configuration do
           endpoint = Betamocks.configuration.find_endpoint(env)
           expect(endpoint).to eq(method: :get, path: '/a/cat/and/dog', file_path: 'cats/with/dogs')
         end
+
+        context 'that utilize regex groups' do
+          let(:env) { double('Faraday::Env') }
+
+          it 'returns the correct endpoint without regex' do
+            url = URI('http://test.gov/files')
+            allow(env).to receive(:url).and_return(url)
+            allow(env).to receive(:method).and_return(:get)
+
+            endpoint = Betamocks.configuration.find_endpoint(env)
+            expect(endpoint[:method]).to eq(:get)
+            expect(endpoint[:file_path]).to eq('efs/files/list')
+          end
+
+          it 'returns the correct endpoint with negative lookahead' do
+            url = URI('http://test.gov/files/FILE_TYPE')
+            allow(env).to receive(:url).and_return(url)
+            allow(env).to receive(:method).and_return(:get)
+
+            endpoint = Betamocks.configuration.find_endpoint(env)
+            expect(endpoint[:method]).to eq(:get)
+            expect(endpoint[:file_path]).to eq('efs/files/download_pdf')
+          end
+
+          it 'returns the correct endpoint with negative lookahead and a wildcard' do
+            url = URI('http://test.gov/files/FILE_TYPE/generate')
+            allow(env).to receive(:url).and_return(url)
+            allow(env).to receive(:method).and_return(:post)
+
+            endpoint = Betamocks.configuration.find_endpoint(env)
+            expect(endpoint[:method]).to eq(:post)
+            expect(endpoint[:file_path]).to eq('efs/files/download_pdf')
+          end
+        end
       end
 
       context 'with an unmocked endpoint' do
@@ -101,7 +135,7 @@ RSpec.describe Betamocks::Configuration do
           before do
             allow(env).to receive(:method).and_return(:post)
             allow(env).to receive(:body)
-            .and_return("#{optional_code_locator_value}<AnimalType>Gorilla</AnimalType><Id>12345678</Id>")
+              .and_return("#{optional_code_locator_value}<AnimalType>Gorilla</AnimalType><Id>12345678</Id>")
           end
 
           it 'returns the proper endpoint for request body' do
@@ -110,7 +144,7 @@ RSpec.describe Betamocks::Configuration do
           end
 
           context 'and optional_code_locator does not match mocked value' do
-           let(:optional_code_locator_value) { '<Quality>ULTRA-CRISP-DEF</Quality>' }
+            let(:optional_code_locator_value) { '<Quality>ULTRA-CRISP-DEF</Quality>' }
 
             it 'responds with an argument error' do
               expect { Betamocks.configuration.find_endpoint(env) }.to raise_exception(ArgumentError)

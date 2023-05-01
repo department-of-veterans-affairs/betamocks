@@ -114,3 +114,37 @@
       :uid_location: some-location
       :uid_locator: some-locator
       :optional_code_locator: '<Quality>"(HI-DEF|LO-DEF)"</Quality>'
+
+# Electronic File Service
+- :name: 'EFS'
+  :base_uri: test.gov:80
+  :endpoints:
+  # Files
+  - :method: :get
+    :path: "/files"
+    :file_path: "efs/files/list"
+    :cache_multiple_responses:
+      :uid_location: header
+      :uid_locator: 'id'
+  - :method: :get
+    :path: "/files/recipient"
+    :file_path: "efs/files/recipient"
+    :cache_multiple_responses:
+      :uid_location: header
+      :uid_locator: 'id'
+  - :method: :get
+    :path: "/files/{{noRecip}}"
+    :regex_groups:
+      :noRecip: "(?!*(recipient))*"
+    :file_path: "efs/files/download_pdf"
+    :cache_multiple_responses:
+      :uid_location: "url"
+      :uid_locator: "\/files/v1\/(.+)"
+  - :method: :post
+    :path: "/files/{{noRecip}}/generate"
+    :regex_groups:
+      :noRecip: "(?!*(recipient))*"
+    :file_path: "efs/files/download_pdf"
+    :cache_multiple_responses:
+      :uid_location: "url"
+      :uid_locator: "\/files/v1\/(.+)\/generate"
