@@ -104,6 +104,16 @@ RSpec.describe Betamocks::Configuration do
             expect(endpoint[:method]).to eq(:post)
             expect(endpoint[:file_path]).to eq('efs/files/download_pdf')
           end
+
+          it 'returns the correct endpoint with multiple regex groups' do
+            url = URI('http://test.gov/files/FILE_TYPE/generate/123')
+            allow(env).to receive(:url).and_return(url)
+            allow(env).to receive(:method).and_return(:get)
+
+            endpoint = Betamocks.configuration.find_endpoint(env)
+            expect(endpoint[:method]).to eq(:get)
+            expect(endpoint[:file_path]).to eq('efs/files/download_pdf/nTimes')
+          end
         end
       end
 
