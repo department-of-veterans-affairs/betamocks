@@ -83,7 +83,7 @@ module Betamocks
     end
 
     def matches_path(endpoint, method, path)
-      mandatory_replacements = {
+      convenience_replacements = {
         '*' => '[^\/]*'
       }
 
@@ -91,14 +91,15 @@ module Betamocks
         '/' => '\/',
         '(' => '\(',
         ')' => '\)'
-      }.merge(mandatory_replacements)
+      }
 
       endpoint_path = escape_endpoint(endpoint[:path], char_literal_replacements)
 
       if (has_regex_groups? endpoint)
-        regex_path = assemble_path_with_regex_groups(endpoint_path, endpoint[:regex_groups])
-        endpoint_path = escape_endpoint(regex_path, mandatory_replacements)
+        endpoint_path = assemble_path_with_regex_groups(endpoint_path, endpoint[:regex_groups])
       end
+
+      endpoint_path = escape_endpoint(endpoint_path, convenience_replacements)
 
       /\A#{endpoint_path}\z/ =~ path && endpoint[:method] == method
     end

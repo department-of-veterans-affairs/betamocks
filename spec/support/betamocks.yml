@@ -166,3 +166,12 @@
     :cache_multiple_responses:
       :uid_location: "url"
       :uid_locator: "\/files/v1\/(.+)"
+  - :method: :get
+    :path: "/files/*/version/{{version}}"
+    :regex_groups:
+      :version: "v(ersion)?[0-9]"
+    :file_path: "efs/files/download_pdf/nTimes"
+    :cache_multiple_responses:
+      :uid_location: "url"
+      :uid_locator: "\/files/v1\/(.+)"
+
