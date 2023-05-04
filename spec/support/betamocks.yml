@@ -157,3 +157,12 @@
     :cache_multiple_responses:
       :uid_location: "url"
       :uid_locator: "\/files/v1\/(.+)"
+  - :method: :get
+    :path: "/files/{{noRecip}}/generateNTimes({{threeDigitNumber}})"
+    :regex_groups:
+      :noRecip: "(?!*(recipient))*"
+      :threeDigitNumber: "[0-9]{3}"
+    :file_path: "efs/files/download_pdf/nTimes"
+    :cache_multiple_responses:
+      :uid_location: "url"
+      :uid_locator: "\/files/v1\/(.+)"
