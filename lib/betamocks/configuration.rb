@@ -61,18 +61,45 @@ module Betamocks
       config[:services].select { |s| s[:base_uri] == "#{env.url.host}:#{env.url.port}" }.first
     end
 
+    def has_regex_groups?(endpoint) 
+      endpoint.key?(:regex_groups)
+    end
+
+    def assemble_path_with_regex_groups(path, regex_groups)
+      regex_groups.reduce(path) do |path, (name,regex)|
+        placeholder = path.match(/{{#{name}}}/)
+        path.gsub(/#{placeholder}/, regex)
+      end
+    end
+
+    def escape_endpoint(endpoint, escape_map)
+      endpoint_path = endpoint
+
+      escape_map.each_pair do |original, replacement|
+        endpoint_path = endpoint_path.gsub(original, replacement)
+      end
+
+      endpoint_path
+    end
+
     def matches_path(endpoint, method, path)
-      replacement_map = {
-        '/' => '\/',
-        '(' => '\(',
-        ')' => '\)',
+      convenience_replacements = {
         '*' => '[^\/]*'
       }
 
-      endpoint_path = endpoint[:path]
-      replacement_map.each_pair do |original, replacement|
-        endpoint_path = endpoint_path.gsub(original, replacement)
+      char_literal_replacements = {
+        '/' => '\/',
+        '(' => '\(',
+        ')' => '\)'
+      }
+
+      endpoint_path = escape_endpoint(endpoint[:path], char_literal_replacements)
+
+      if (has_regex_groups? endpoint)
+        endpoint_path = assemble_path_with_regex_groups(endpoint_path, endpoint[:regex_groups])
       end
+
+      endpoint_path = escape_endpoint(endpoint_path, convenience_replacements)
 
       /\A#{endpoint_path}\z/ =~ path && endpoint[:method] == method
     end
