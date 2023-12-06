@@ -33,7 +33,7 @@ module Betamocks
     def save_response(env)
       response = {
         method: env.method,
-        body: env.body,
+        body: env.response_body,
         headers: env.response_headers.as_json,
         status: env.status
       }
@@ -46,7 +46,7 @@ module Betamocks
     def load_env(file)
       cached_env = YAML.load_file(file)
       env.method = cached_env[:method]
-      env.body = cached_env[:body]
+      env.response_body = cached_env[:body]
       env.response_headers = cached_env[:headers]
       env.status = cached_env[:status]
       env
