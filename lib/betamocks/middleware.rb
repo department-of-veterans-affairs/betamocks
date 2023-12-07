@@ -7,7 +7,7 @@ require 'pp'
 require_relative 'response_cache'
 
 module Betamocks
-  class Middleware < Faraday::Response::Middleware
+  class Middleware < Faraday::Middleware
     def call(env)
       return super unless Betamocks.configuration.enabled?
       @endpoint_config = Betamocks.configuration.find_endpoint(env)
