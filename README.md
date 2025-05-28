@@ -1,6 +1,5 @@
 # Betamocks
 
-[![Gem Version](https://badge.fury.io/rb/betamocks.svg)](https://badge.fury.io/rb/betamocks)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
 
 Betamocks is Faraday middleware that mocks APIs by recording and replaying requests.
